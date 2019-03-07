@@ -9,7 +9,9 @@ export default class postLayout extends Component {
             <Layout>
                 <div>
                     <h1>{markdownRemark.frontmatter.title}</h1>
-                    <div dangerouslySetInnerHTML={{__html: markdownRemark.html}}/>
+                    <div dangerouslySetInnerHTML={{
+                        __html: markdownRemark.html
+                    }}/>
                 </div>
             </Layout>
         )
