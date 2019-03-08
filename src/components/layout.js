@@ -11,6 +11,7 @@ import { StaticQuery, graphql } from "gatsby"
 
 import Header from "./header"
 import Archive from './archive'
+import SEO from "./seo"
 import "./layout.css"
 
 const Layout = ({ children }) => (
@@ -27,6 +28,7 @@ const Layout = ({ children }) => (
     render={data => (
       <>
         <Header siteTitle={data.site.siteMetadata.title} />
+        <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />
         <div
           style={{
             margin: `0 auto`,
@@ -35,9 +37,10 @@ const Layout = ({ children }) => (
             paddingTop: 0,
           }}
         >
-          <main>{children}
-          <Archive />
+          <main>
+            {children}
           </main>
+          <Archive />
           <footer>
             © {new Date().getFullYear()}, Built with
             {` `}
