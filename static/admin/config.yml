@@ -1,0 +1,20 @@
+backend:
+  name: github
+  branch: master
+  repo: wcjohnson11/wcj-io
+
+media_folder: static/img
+public_folder: /img
+
+collections:
+  - name: "posts"
+    label: "Blog Posts"
+    folder: "src/posts"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Slug", name: "slug", widget: "string"}
+      - { label: "Title", name: "title", widget: "string"}
+      - { label: "Date", name: "date", widget: "datetime"}
+      - { label: "Tags", name: "tags", widget: "list"}
+      - { label: "Content", name: "body", widget: "markdown"}
