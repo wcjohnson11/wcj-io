@@ -18,3 +18,15 @@ collections:
       - { label: "Date", name: "date", widget: "datetime"}
       - { label: "Tags", name: "tags", widget: "list"}
       - { label: "Content", name: "body", widget: "markdown"}
+
+  - name: "projects"
+    label: "Personal Projects"
+    folder: "src/projects"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Slug", name: "slug", widget: "string"}
+      - { label: "Title", name: "title", widget: "string"}
+      - { label: "Date", name: "date", widget: "datetime"}
+      - { label: "Tags", name: "tags", widget: "list"}
+      - { label: "Content", name: "body", widget: "markdown"}

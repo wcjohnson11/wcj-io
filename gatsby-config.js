@@ -3,6 +3,7 @@ module.exports = {
     title: `William Johnson Personal Site`,
     description: `Analytics, Art, Data, Engineering`,
     author: `@gatsbyjs`,
+    siteUrl: `https://wcj.io`,
   },
   plugins: [
     `gatsby-plugin-styled-components`,
@@ -46,6 +47,7 @@ module.exports = {
     },
     `gatsby-transformer-remark`,
     `gatsby-plugin-netlify`,
+    `gatsby-plugin-sitemap`,
     `gatsby-plugin-netlify-cms`
   ],
 }
