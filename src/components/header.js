@@ -11,7 +11,7 @@ const HeaderWrapper = styled.header`
 const HeaderContainer = styled.header`
   margin: 0 auto;
   max-width: 960px;
-  padding: 1rem 1rem;
+  padding: .4rem .4rem;
   h1 {
     margin: 0;
   }
