@@ -24,7 +24,7 @@ const MainLayout = styled.main`
   grid-gap: 40px;
 `
 
-const Layout = ({ children }) => (
+const Layout = ({ children, location }) => (
   <StaticQuery
     query={graphql`
       query SiteTitleQuery {
@@ -46,7 +46,9 @@ const Layout = ({ children }) => (
       <>
         <Header siteTitle={data.site.siteMetadata.title} />
         <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />
-        <Img fluid={data.file.childImageSharp.fluid} />
+        { location.pathname === "/" &&
+          <Img fluid={data.file.childImageSharp.fluid} />
+        }
         <MainLayout>
           <div>
             {children}
