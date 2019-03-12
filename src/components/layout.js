@@ -1,81 +1,79 @@
-/**
- * Layout component that queries for data
- * with Gatsby's StaticQuery component
- *
- * See: https://www.gatsbyjs.org/docs/static-query/
- */
+import React from 'react';
+import PropTypes from 'prop-types';
+import { StaticQuery, graphql } from 'gatsby';
+import styled, { ThemeProvider } from 'styled-components';
 
-import React from "react"
-import PropTypes from "prop-types"
-import Img from "gatsby-image"
-import { Spring } from "react-spring/renderprops"
-import { StaticQuery, graphql } from "gatsby"
-import styled from "styled-components"
+import Header from './header';
+import Archive from './archive';
+import SEO from './seo';
+import './layout.css';
 
-import Header from "./header"
-import Archive from './archive'
-import SEO from "./seo"
-import "./layout.css"
+const Theme = {
+	colorPrimary    : '#3eb0ef',
+	colorBase       : '#15171A',
+	colorSecondary  : '#5B7A81',
+	colorBorder     : '#c7d5d8',
+	colorBackground : '#f5f5f5',
+	fontLight       : 100,
+	fontNormal      : 400,
+	fontBold        : 700,
+	fontHeavy       : 800,
+	height          : '4rem',
+	margin          : '2rem',
+	radius          : '.6rem'
+};
 
 const MainLayout = styled.main`
-  max-width: 90%;
-  margin: 1rem auto;
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  grid-gap: 40px;
-`
+	max-width: 90%;
+	margin: 1rem auto;
+	display: grid;
+	grid-template-columns: 3fr 1fr;
+	grid-gap: 40px;
+`;
 
 const Layout = ({ children, location }) => (
-  <StaticQuery
-    query={graphql`
-      query SiteTitleQuery {
-        site {
-          siteMetadata {
-            title
-          }
-        }
-        file(relativePath: { regex: "/bg/"}) {
-          childImageSharp {
-            fluid(maxWidth: 1000) {
-              ...GatsbyImageSharpFluid_tracedSVG
-            }
-          }
-        }
-      }
-    `}
-    render={data => (
-      <>
-        <Header siteTitle={data.site.siteMetadata.title} />
-        <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />
-        <Spring
-          from={{height: location.pathname === "/" ? 100 : 900}}
-          to={{height: location.pathname === "/" ? 900 : 100}}
-        >
-          {styles => (
-            <div style={{overflow: 'hidden', ...styles}}>
-              <Img fluid={data.file.childImageSharp.fluid} />
-            </div>
-          )}
-        </Spring>
-        <MainLayout>
-          <div>
-            {children}
-          </div>
-          <Archive />
-        </MainLayout>
-        <footer>
-          © {new Date().getFullYear()}, Built with
-          {` `}
-          <a href="https://www.gatsbyjs.org">Gatsby</a>
-        </footer>
-      </>
-    )}
-  />
-)
+	<StaticQuery
+		query={graphql`
+			query SiteTitleQuery {
+				site {
+					siteMetadata {
+						title
+					}
+				}
+			}
+		`}
+		render={(data) => (
+			<React.Fragment>
+				<ThemeProvider theme={Theme}>
+					<Header siteTitle={data.site.siteMetadata.title} location={location} theme={Theme} />
+				</ThemeProvider>
+				<SEO
+					title="Home"
+					keywords={[
+						`gatsby`,
+						`application`,
+						`react`
+					]}
+				/>
+				<ThemeProvider theme={Theme}>
+					<MainLayout>
+						<div>{children}</div>
+						<Archive />
+					</MainLayout>
+				</ThemeProvider>
+				<footer>
+					© {new Date().getFullYear()}, Built with
+					{` `}
+					<a href="https://www.gatsbyjs.org">Gatsby</a>
+				</footer>
+			</React.Fragment>
+		)}
+	/>
+);
 
 Layout.propTypes = {
-  children: PropTypes.node.isRequired,
-  location: PropTypes.object.isRequired
-}
+	children : PropTypes.node.isRequired,
+	location : PropTypes.object.isRequired
+};
 
-export default Layout
+export default Layout;
