@@ -48,8 +48,8 @@ const Layout = ({ children, location }) => (
         <Header siteTitle={data.site.siteMetadata.title} />
         <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />
         <Spring
-          from={{height: location.pathname === "/" ? 100 : 200}}
-          to={{height: location.pathname === "/" ? 200 : 100}}
+          from={{height: location.pathname === "/" ? 100 : 900}}
+          to={{height: location.pathname === "/" ? 900 : 100}}
         >
           {styles => (
             <div style={{overflow: 'hidden', ...styles}}>

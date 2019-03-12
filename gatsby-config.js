@@ -4,6 +4,7 @@ module.exports = {
     description: `Analytics, Art, Data, Engineering`,
     author: `@gatsbyjs`,
     siteUrl: `https://wcj.io`,
+    image: `/src/images/favicon.ico`
   },
   plugins: [
     `gatsby-plugin-styled-components`,
@@ -16,13 +17,13 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
+        name: `William Johnson Personal Site`,
+        short_name: `wcj.io`,
         start_url: `/`,
         background_color: `#663399`,
         theme_color: `#663399`,
         display: `minimal-ui`,
-        icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+        icon: `src/images/favicon.png`, // This path is relative to the root of the site.
       },
     },
     {
