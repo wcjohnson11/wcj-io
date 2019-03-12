@@ -1,13 +1,14 @@
 module.exports = {
 	siteMetadata : {
-		title       : `William Johnson Personal Site`,
+		title       : `wcj.io`,
 		description : `Analytics, Art, Data, Engineering`,
-		author      : `@gatsbyjs`,
+		author      : `@wcjohnson11`,
+		authorName  : `William Johnson`,
 		siteUrl     : `https://wcj.io`,
 		image       : `/src/images/favicon.ico`
 	},
 	plugins      : [
-    {
+		{
 			resolve : `gatsby-source-filesystem`,
 			options : {
 				name : `uploads`,
@@ -34,7 +35,7 @@ module.exports = {
 				plugins : [
 					// gatsby-remark-relative-images must
 					// go before gatsby-remark-images
-          // https://github.com/danielmahon/gatsby-remark-relative-images
+					// https://github.com/danielmahon/gatsby-remark-relative-images
 					`gatsby-remark-relative-images`,
 					{
 						resolve : `gatsby-remark-images`,
@@ -76,6 +77,6 @@ module.exports = {
 			options : {
 				pathToConfigModule : `src/utils/typography.js`
 			}
-		},
+		}
 	]
 };
