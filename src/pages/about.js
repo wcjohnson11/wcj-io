@@ -1,6 +1,5 @@
 import React from 'react';
 import { graphql } from 'gatsby';
-import { Spring } from 'react-spring/renderprops';
 import Img from 'gatsby-image';
 import Layout from '../components/layout';
 
@@ -10,16 +9,9 @@ const About = ({ data, location }) => {
 	return (
 		<Layout location={location}>
 			<div>
-				<Spring
-					from={{ height: location.pathname === '/' ? 100 : 500 }}
-					to={{ height: location.pathname === '/' ? 500 : 100 }}
-				>
-					{(styles) => (
-						<div style={{ overflow: 'hidden', ...styles }}>
-							<Img fluid={data.file.childImageSharp.fluid} />
-						</div>
-					)}
-				</Spring>
+				<div style={{ overflow: 'hidden' }}>
+					<Img fluid={data.file.childImageSharp.fluid} />
+				</div>
 				<h1>About</h1>
 				<h3>{node.frontmatter.title}</h3>
 				<div dangerouslySetInnerHTML={createMarkup()} />
