@@ -24,15 +24,23 @@ const Post = styled.article`
     }
 `
 
-const LISTING_QUERY = graphql`
-    query BlogPostListing {
-        allMarkdownRemark(limit: 10, sort: {
+const PROJECTS_LISTING_QUERY = graphql`
+    query ProjectsPostListing {
+        allMarkdownRemark(
+            limit: 10,
+            filter: {
+                fileAbsolutePath: {
+                    regex: "/src/projects/"
+                }
+            }
+            sort: {
             order: DESC,
             fields: [frontmatter___date]
         }) {
             edges {
                 node {
                     excerpt
+                    fileAbsolutePath
                     frontmatter {
                         date(formatString: "MMMM DD, YYYY")
                         title
@@ -44,9 +52,9 @@ const LISTING_QUERY = graphql`
     }
 `
 
-const Listing = () => (
+const ProjectListing = ({type}) => (
     <StaticQuery 
-        query={LISTING_QUERY}
+        query={PROJECTS_LISTING_QUERY}
         render={({allMarkdownRemark}) => (
             allMarkdownRemark.edges.map(({node}) => (
                 <Post key={node.frontmatter.slug}>
@@ -60,4 +68,4 @@ const Listing = () => (
     />
 )
 
-export default Listing
+export default ProjectListing

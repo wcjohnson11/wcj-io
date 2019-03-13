@@ -1,11 +1,13 @@
 import React from "react"
 
 import Layout from "../components/layout"
-import Listing from "../components/listing"
+import BlogListing from "../components/blogListing"
+import ProjectListing from "../components/projectListing"
 
 const IndexPage = ({location}) => (
   <Layout location={location}>
-    <Listing />
+    <BlogListing />
+    <ProjectListing />
   </Layout>
 )
 
