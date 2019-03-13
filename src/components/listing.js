@@ -53,7 +53,7 @@ const Listing = () => (
                     <h2>{node.frontmatter.title}</h2>
                     <p>{node.frontmatter.date}</p>
                     <p>{node.excerpt}</p>
-                    <Link to={`/posts${node.frontmatter.slug}`}>Read More</Link>
+                    <Link to={`/blog${node.frontmatter.slug}`}>Read More</Link>
                 </Post>
             ))
         )}
