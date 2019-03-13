@@ -166,11 +166,17 @@ const Header = ({ description, location, siteName, siteTitle }) => {
 };
 
 Header.propTypes = {
-	siteTitle : PropTypes.string
+	siteTitle : PropTypes.string,
+  description: PropTypes.string,
+  location: PropTypes.object,
+  siteName: PropTypes.string
 };
 
 Header.defaultProps = {
-	siteTitle : ``
+	siteTitle : ``,
+  description: ``,
+  location: { pathname: `/`},
+  siteName: ``
 };
 
 export default Header;
