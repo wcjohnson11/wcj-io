@@ -97,12 +97,12 @@ const HomePageHero = styled.div`
 	justify-content: center;
 `;
 
-const Header = ({ location, siteTitle }) => (
+const Header = ({ description, location, siteName, siteTitle }) => (
 	<HeaderWrapper>
 		<HeaderContainer>
 			<HeaderTop>
 				<HeaderLink primary="true" to="/">
-					{siteTitle}
+					{siteName}
 				</HeaderLink>
 				<HeaderNavList>
 					<HeaderNavLink href="https://www.github.com/wcjohnson11" target="_blank" title="github">
@@ -131,7 +131,8 @@ const Header = ({ location, siteTitle }) => (
 			>
 				{(styles) => (
 					<HomePageHero style={{ overflow: 'hidden', ...styles }}>
-						<h1>Hellurr</h1>
+						<h1>{siteTitle}</h1>
+            <h3>{description}</h3>
 					</HomePageHero>
 				)}
 			</Spring>

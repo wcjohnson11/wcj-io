@@ -37,15 +37,22 @@ const Layout = ({ children, location }) => (
 			query SiteTitleQuery {
 				site {
 					siteMetadata {
+            description
+            siteName
 						title
 					}
 				}
 			}
 		`}
-		render={(data) => (
+		render={({site}) => (
 			<React.Fragment>
 				<ThemeProvider theme={Theme}>
-					<Header siteTitle={data.site.siteMetadata.title} location={location} theme={Theme} />
+					<Header
+            description={site.siteMetadata.description}
+            siteName={site.siteMetadata.siteName}
+            siteTitle={site.siteMetadata.title}
+            location={location}
+          />
 				</ThemeProvider>
 				<SEO
 					title="Home"
@@ -62,9 +69,7 @@ const Layout = ({ children, location }) => (
 					</MainLayout>
 				</ThemeProvider>
 				<footer>
-					© {new Date().getFullYear()}, Built with
-					{` `}
-					<a href="https://www.gatsbyjs.org">Gatsby</a>
+					© {new Date().getFullYear()}, Built by William Johnson
 				</footer>
 			</React.Fragment>
 		)}
