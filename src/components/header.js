@@ -14,7 +14,7 @@ const HeaderWrapper = styled.header`
 const HeaderContainer = styled.header`
 	margin: 0 auto;
 	max-width: 960px;
-	padding: .4rem .4rem;
+  padding: .4rem .4rem;
 `;
 
 const HeaderTop = styled.div`
@@ -36,8 +36,13 @@ const HeaderBottom = styled.div`
 const HeaderBottomLeft = styled.div`
 	margin: 0 20px 0 -10px;
 	a {
-		padding: 10px 10px;
+    padding: 10px 10px;
 	}
+  a[aria-current] {
+    color: ${(props) => props.theme.colorSecondary};
+    text-decoration: underline;
+    text-decoration-color: ${(props) => props.theme.colorPrimary}
+  }
 `;
 
 const HeaderBottomRight = styled.div`
@@ -45,8 +50,8 @@ const HeaderBottomRight = styled.div`
 	a {
 		display: inline-block;
 		padding: 5px 10px;
-		border: ${(props) => props.theme.baseColor} 1px solid;
-		color: ${(props) => props.theme.baseColor};
+		border: ${(props) => props.theme.colorBorder} 1px solid;
+		color: ${(props) => props.theme.colorBase};
 		font-size: .8rem;
 		line-height: .8rem;
 		border-radius: ${(props) => props.theme.radius};
@@ -70,6 +75,7 @@ const HeaderLink = styled(Link)`
   }
   :hover {
     color: ${(props) => props.theme.colorPrimary};
+    border-color: ${(props) => props.theme.colorPrimary}
   }
   ${(props) => (props.primary ? css`font-size: 1.5rem;` : css`font-size: .8rem;`)}
 `;
