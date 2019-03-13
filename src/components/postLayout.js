@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { graphql } from 'gatsby';
 import Layout from './layout';
+import Archive from './archive';
 
 export default class postLayout extends Component {
 	render() {
@@ -16,6 +17,7 @@ export default class postLayout extends Component {
 						}}
 					/>
 				</div>
+				<Archive />
 			</Layout>
 		);
 	}
