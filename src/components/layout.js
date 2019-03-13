@@ -37,22 +37,22 @@ const Layout = ({ children, location }) => (
 			query SiteTitleQuery {
 				site {
 					siteMetadata {
-            description
-            siteName
+						description
+						siteName
 						title
 					}
 				}
 			}
 		`}
-		render={({site}) => (
+		render={({ site }) => (
 			<React.Fragment>
 				<ThemeProvider theme={Theme}>
 					<Header
-            description={site.siteMetadata.description}
-            siteName={site.siteMetadata.siteName}
-            siteTitle={site.siteMetadata.title}
-            location={location}
-          />
+						description={site.siteMetadata.description}
+						siteName={site.siteMetadata.siteName}
+						siteTitle={site.siteMetadata.title}
+						location={location}
+					/>
 				</ThemeProvider>
 				<SEO
 					title="Home"
@@ -68,9 +68,7 @@ const Layout = ({ children, location }) => (
 						<Archive />
 					</MainLayout>
 				</ThemeProvider>
-				<footer>
-					© {new Date().getFullYear()}, Built by William Johnson
-				</footer>
+				<footer>© {new Date().getFullYear()}, Built by {site.siteMetadata.title}</footer>
 			</React.Fragment>
 		)}
 	/>
