@@ -20,15 +20,32 @@ const Theme = {
 	fontHeavy       : 800,
 	height          : '4rem',
 	margin          : '2rem',
-	radius          : '.6rem'
+	radius          : '.6rem',
+	breakpoints     : {
+		tablet : '780px',
+		phone  : '420px'
+	}
 };
 
+const LayoutWrapper = styled.div`
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+`;
+
 const MainLayout = styled.main`
+	flex-grow: 1;
 	max-width: 90%;
 	margin: 1rem auto;
 	display: grid;
-	grid-template-columns: 3fr 1fr;
+	grid-template-columns: 1fr;
 	grid-gap: 40px;
+`;
+
+const Footer = styled.footer`
+	text-align: center;
+	flex-shrink: 0;
 `;
 
 const Layout = ({ children, location }) => (
@@ -45,31 +62,31 @@ const Layout = ({ children, location }) => (
 			}
 		`}
 		render={({ site }) => (
-			<React.Fragment>
-				<ThemeProvider theme={Theme}>
+			<ThemeProvider theme={Theme}>
+				<LayoutWrapper>
 					<Header
 						description={site.siteMetadata.description}
 						siteName={site.siteMetadata.siteName}
 						siteTitle={site.siteMetadata.title}
 						location={location}
 					/>
-				</ThemeProvider>
-				<SEO
-					title="Home"
-					keywords={[
-						`gatsby`,
-						`application`,
-						`react`
-					]}
-				/>
-				<ThemeProvider theme={Theme}>
+					<SEO
+						title="Home"
+						keywords={[
+							`gatsby`,
+							`application`,
+							`react`
+						]}
+					/>
 					<MainLayout>
 						<div>{children}</div>
 						<Archive />
 					</MainLayout>
-				</ThemeProvider>
-				<footer>© {new Date().getFullYear()}, Built by {site.siteMetadata.title}</footer>
-			</React.Fragment>
+					<Footer>
+						© {new Date().getFullYear()}, Built by {site.siteMetadata.title}
+					</Footer>
+				</LayoutWrapper>
+			</ThemeProvider>
 		)}
 	/>
 );
