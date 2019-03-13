@@ -39,7 +39,6 @@ const HeaderBottomLeft = styled.div`
     padding: 10px 10px;
 	}
   a[aria-current] {
-    color: ${(props) => props.theme.colorSecondary};
     text-decoration: underline;
     text-decoration-color: ${(props) => props.theme.colorPrimary}
   }
