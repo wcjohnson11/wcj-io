@@ -54,7 +54,7 @@ const HeaderBottomRight = styled.div`
 		font-size: .8rem;
 		line-height: .8rem;
 		border-radius: ${(props) => props.theme.radius};
-		opacity: 0.7;
+		opacity: 0.9;
 	}
 `;
 
@@ -157,8 +157,8 @@ const Header = ({ description, location, siteName, siteTitle }) => {
 				<HeaderBottom>
 					<HeaderBottomLeft>
 						<HeaderLink to="/">home</HeaderLink>
-						<HeaderLink to="/blog">blog</HeaderLink>
 						<HeaderLink to="/about">about</HeaderLink>
+						<HeaderLink to="/blog">blog</HeaderLink>
 						<HeaderLink to="/projects">projects</HeaderLink>
 					</HeaderBottomLeft>
 					<HeaderBottomRight>
