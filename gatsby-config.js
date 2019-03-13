@@ -1,9 +1,9 @@
 module.exports = {
 	siteMetadata : {
-		title       : `wcj.io`,
+		title       : `Wiliam Johnson`,
 		description : `Analytics, Art, Data, Engineering`,
 		author      : `@wcjohnson11`,
-		authorName  : `William Johnson`,
+		siteName    : `wcj.io`,
 		siteUrl     : `https://wcj.io`,
 		image       : `/src/images/favicon.ico`
 	},
