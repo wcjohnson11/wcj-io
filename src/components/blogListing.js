@@ -8,7 +8,7 @@ const Post = styled.article`
     padding: 1rem;
     border-radius: 4px;
     margin-bottom: 1rem;
-    h2 {
+    h3 {
         margin-bottom: 0;
     }
     a {
@@ -58,7 +58,7 @@ const BlogListing = ({type}) => (
         render={({allMarkdownRemark}) => (
             allMarkdownRemark.edges.map(({node}) => (
                 <Post key={node.frontmatter.slug}>
-                    <h2>{node.frontmatter.title}</h2>
+                    <h3>{node.frontmatter.title}</h3>
                     <p>{node.frontmatter.date}</p>
                     <p>{node.excerpt}</p>
                     <Link to={`/blog${node.frontmatter.slug}`}>Read More</Link>
