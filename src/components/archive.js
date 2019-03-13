@@ -6,7 +6,8 @@
  */
 
 import React from "react"
-import { graphql, Link, StaticQuery } from "gatsby"
+import { Link } from "./linkWithPrevUrl";
+import { graphql, StaticQuery } from "gatsby"
 import styled from "styled-components"
 
 const ArchiveList = styled.ul`

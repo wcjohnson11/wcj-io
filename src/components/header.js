@@ -1,4 +1,4 @@
-import { Link } from './link-with-prev-url';
+import { Link } from './linkWithPrevUrl';
 import { Spring } from 'react-spring/renderprops';
 import PropTypes from 'prop-types';
 import React from 'react';

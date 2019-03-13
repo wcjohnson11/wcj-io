@@ -1,5 +1,5 @@
 import React from "react"
-import { Link } from "gatsby"
+import { Link } from '../components/linkWithPrevUrl';
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
