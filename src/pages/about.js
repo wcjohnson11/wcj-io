@@ -1,39 +1,26 @@
 import React from 'react';
-import { graphql } from 'gatsby';
+import { graphql, Link } from 'gatsby';
 import Img from 'gatsby-image';
 import Layout from '../components/layout';
 
-const About = ({ data, location }) => {
-	const { node } = data.allMarkdownRemark.edges[0];
-	const createMarkup = () => ({ __html: node.html });
-	return (
-		<Layout location={location}>
-			<div>
-				<div style={{ overflow: 'hidden' }}>
-					<Img fluid={data.file.childImageSharp.fluid} />
-				</div>
-				<h1>About</h1>
-				<h3>{node.frontmatter.title}</h3>
-				<div dangerouslySetInnerHTML={createMarkup()} />
+const About = ({ data, location }) => (
+	<Layout location={location}>
+		<div>
+			<h1>Hello!</h1>
+			<p>I'm a Software Engineer and Analyst with a background in analysis, planning and customer relations roles in Finance and Advertising.</p>
+			<p>I'm currently looking for a job! <Link to="/contact">Get in touch and we'll see if it's a good fit!</Link> </p>
+			<div style={{ overflow: 'hidden' }}>
+				<Img fluid={data.file.childImageSharp.fluid} />
 			</div>
-		</Layout>
-	);
-};
+			<p>I like to build things with code, analyze and visualize data, and help people be more productive.</p>
+		</div>
+	</Layout>
+);
 
 export default About;
 
 export const query = graphql`
 	{
-		allMarkdownRemark {
-			edges {
-				node {
-					html
-					frontmatter {
-						title
-					}
-				}
-			}
-		}
 		file(relativePath: { regex: "/bg/" }) {
 			childImageSharp {
 				fluid {
