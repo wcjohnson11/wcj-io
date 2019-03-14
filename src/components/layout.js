@@ -4,7 +4,6 @@ import { StaticQuery, graphql } from 'gatsby';
 import styled, { ThemeProvider } from 'styled-components';
 
 import Header from './header';
-import Archive from './archive';
 import SEO from './seo';
 import './layout.css';
 
@@ -80,7 +79,6 @@ const Layout = ({ children, location }) => (
 					/>
 					<MainLayout>
 						<div>{children}</div>
-						<Archive />
 					</MainLayout>
 					<Footer>
 						© {new Date().getFullYear()}, Built by {site.siteMetadata.title}
