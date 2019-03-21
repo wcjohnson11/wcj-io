@@ -6,25 +6,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import Header from './header';
 import SEO from './seo';
 import './layout.css';
-
-const Theme = {
-	colorPrimary    : '#3eb0ef',
-	colorBase       : '#15171A',
-	colorSecondary  : '#5B7A81',
-	colorBorder     : '#c7d5d8',
-	colorBackground : '#f5f5f5',
-	fontLight       : 100,
-	fontNormal      : 400,
-	fontBold        : 700,
-	fontHeavy       : 800,
-	height          : '4rem',
-	margin          : '2rem',
-	radius          : '.6rem',
-	breakpoints     : {
-		tablet : '780px',
-		phone  : '420px'
-	}
-};
+import theme from '../utils/theme';
 
 const LayoutWrapper = styled.div`
 	min-height: 100vh;
@@ -40,6 +22,9 @@ const MainLayout = styled.main`
 	display: grid;
 	grid-template-columns: 1fr;
 	grid-gap: 40px;
+	@media (max-width: 960px) {
+		max-width: 98%;
+	}
 `;
 
 const Footer = styled.footer`
@@ -61,7 +46,7 @@ const Layout = ({ children, location }) => (
 			}
 		`}
 		render={({ site }) => (
-			<ThemeProvider theme={Theme}>
+			<ThemeProvider theme={theme}>
 				<LayoutWrapper>
 					<Header
 						description={site.siteMetadata.description}
