@@ -13,8 +13,12 @@ const HeaderWrapper = styled.header`
 
 const HeaderContainer = styled.header`
 	margin: 0 auto;
-	max-width: 960px;
-  padding: .4rem .4rem;
+	max-width: 850px;
+	padding: .4rem .4rem;
+	@media (max-width: 880px) {
+		margin-left: .9rem;
+		margin-right: .9rem;
+	}
 `;
 
 const HeaderTop = styled.div`
@@ -36,16 +40,16 @@ const HeaderBottom = styled.div`
 const HeaderBottomLeft = styled.div`
 	margin: 0 20px 0 -10px;
 	a {
-    padding: 10px 10px;
+		padding: 10px 10px;
 	}
-  a[aria-current] {
-    text-decoration: underline;
-    text-decoration-color: ${(props) => props.theme.colorPrimary}
-  }
+	a[aria-current] {
+		text-decoration: underline;
+		text-decoration-color: ${(props) => props.theme.colorPrimary};
+	}
 `;
 
 const HeaderBottomRight = styled.div`
-	margin: 0 0px 0 20px;
+	margin: 0 -10px 0 10px;
 	a {
 		display: inline-block;
 		padding: 5px 10px;
@@ -141,8 +145,8 @@ const Header = ({ description, location, siteName, siteTitle }) => {
 				{isHomepageTransition && (
 					<Spring
 						from={{
-							opacity: location.pathname === '/' ? 0 : 1,
-							height: location.pathname === '/' ? 0 : 500
+							opacity : location.pathname === '/' ? 0 : 1,
+							height  : location.pathname === '/' ? 0 : 500
 						}}
 						to={{ opacity: location.pathname === '/' ? 1 : 0, height: location.pathname === '/' ? 500 : 0 }}
 					>
@@ -171,17 +175,17 @@ const Header = ({ description, location, siteName, siteTitle }) => {
 };
 
 Header.propTypes = {
-	siteTitle : PropTypes.string,
-  description: PropTypes.string,
-  location: PropTypes.object,
-  siteName: PropTypes.string
+	siteTitle   : PropTypes.string,
+	description : PropTypes.string,
+	location    : PropTypes.object,
+	siteName    : PropTypes.string
 };
 
 Header.defaultProps = {
-	siteTitle : ``,
-  description: ``,
-  location: { pathname: `/`},
-  siteName: ``
+	siteTitle   : ``,
+	description : ``,
+	location    : { pathname: `/` },
+	siteName    : ``
 };
 
 export default Header;
