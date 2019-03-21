@@ -61,7 +61,7 @@ const ProjectListing = ({type}) => (
                     <h3>{node.frontmatter.title}</h3>
                     <p>{node.frontmatter.date}</p>
                     <p>{node.excerpt}</p>
-                    <Link to={`${node.frontmatter.slug}`}>Read More</Link>
+                    <Link to={`/projects/${node.frontmatter.slug}`}>Read More</Link>
                 </Post>
             ))
         )}
