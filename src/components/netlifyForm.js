@@ -55,7 +55,7 @@ const ContactWrapper = styled.section`
 `
 
 const netlifyForm = () => (
-    <ContactWrapper>
+    <ContactWrapper id="contact">
       <h3>Get in touch and I'll get back to you soon!</h3>
         <form
             name="contact"

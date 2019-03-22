@@ -78,10 +78,22 @@ const HeaderLink = styled(Link)`
   }
   :hover {
     color: ${(props) => props.theme.colorPrimary};
-    border-color: ${(props) => props.theme.colorPrimary}
+    border-color: ${(props) => props.theme.colorPrimary};
   }
-  ${(props) => (props.primary ? css`font-size: 1.5rem;` : css`font-size: .8rem;`)}
+  ${(props) => (props.primary ? css`font-size: 1.5rem;` : css`font-size: .8rem;`)};
 `;
+
+const ContactLink = styled.a`
+  color: ${(props) => props.theme.colorBase};
+  text-decoration: none;
+  font-weight: ${(props) => props.theme.fontBold};
+  font-family: 'Merriweather', serif;
+  :hover {
+    color: ${(props) => props.theme.colorPrimary};
+    border-color: ${(props) => props.theme.colorPrimary};
+  }
+  ${(props) => (props.primary ? css`font-size: 1.5rem;` : css`font-size: .8rem;`)};
+`
 
 const HeaderNavLink = styled.a`
 	display: inline-block;
@@ -166,7 +178,7 @@ const Header = ({ description, location, siteName, siteTitle }) => {
 						<HeaderLink to="/projects">projects</HeaderLink>
 					</HeaderBottomLeft>
 					<HeaderBottomRight>
-						<HeaderLink to="/contact">contact</HeaderLink>
+						<ContactLink href="#contact">contact</ContactLink>
 					</HeaderBottomRight>
 				</HeaderBottom>
 			</HeaderContainer>
