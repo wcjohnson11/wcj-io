@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const ContactWrapper = styled.div`
-  border-radius: 1rem;
+const ContactWrapper = styled.section`
   padding: 2rem 4rem;
+  display: flex;
+  flex-direction: column;
   background-color: ${props => props.theme.colorBackground};
-  margin-top: -3rem;
-  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
     padding: 3rem 3rem;
   }
   @media (max-width: ${props => props.theme.breakpoints.mobileL}) {
@@ -21,12 +21,27 @@ const ContactWrapper = styled.div`
       input {
         min-width: 275px;
         margin-top: 0.5rem;
+        :focus {
+          outline: ${props => props.theme.colorPrimary} auto 5px;
+        }
       }
       textarea {
         resize: vertical;
         min-height: 150px;
         width: 100%;
         margin-top: 0.5rem;
+        :focus {
+          outline: ${props => props.theme.colorPrimary} auto 5px;
+        }
+      }
+      button {
+        border-radius: 10px;
+        border: 1px ${props => props.theme.colorPrimary} solid;
+        :focus {
+          outline: none;
+          background-color: ${props => props.theme.colorPrimary};
+          box-shadow: 0 0 0 2pt ${props => props.theme.colorPrimary};
+        }
       }
     }
   }
@@ -34,6 +49,7 @@ const ContactWrapper = styled.div`
 
 const netlifyForm = () => (
     <ContactWrapper>
+      <h3>Get in touch and I'll get back to you soon!</h3>
         <form
             name="contact"
             method="post"
