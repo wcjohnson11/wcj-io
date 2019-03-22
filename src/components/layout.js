@@ -22,7 +22,7 @@ const MainLayout = styled.main`
 	display: grid;
 	grid-template-columns: 1fr;
 	grid-gap: 40px;
-	@media (max-width: 960px) {
+	@media (max-width: ${(props) => props.theme.breakpoints.tablet}) {
 		max-width: 98%;
 	}
 `;

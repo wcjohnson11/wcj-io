@@ -15,7 +15,7 @@ const HeaderContainer = styled.header`
 	margin: 0 auto;
 	max-width: 850px;
 	padding: .4rem .4rem;
-	@media (max-width: 880px) {
+	@media (max-width: ${(props) => props.theme.breakpoints.tablet}) {
 		margin-left: .9rem;
 		margin-right: .9rem;
 	}
@@ -53,11 +53,11 @@ const HeaderBottomRight = styled.div`
 	a {
 		display: inline-block;
 		padding: 5px 10px;
-		border: ${(props) => props.theme.colorBorder} 1px solid;
+		/* border: ${(props) => props.theme.colorBorder} 1px solid; */
 		color: ${(props) => props.theme.colorBase};
 		font-size: .8rem;
 		line-height: .8rem;
-		border-radius: ${(props) => props.theme.radius};
+		/* border-radius: ${(props) => props.theme.radius}; */
 		opacity: 0.9;
 	}
 `;
