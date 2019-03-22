@@ -5,22 +5,27 @@ const ContactWrapper = styled.section`
   padding: 2rem 4rem;
   display: flex;
   flex-direction: column;
+  text-align: center;
   background-color: ${props => props.theme.colorBackground};
   @media (min-width: ${props => props.theme.breakpoints.tablet}) {
-    padding: 3rem 3rem;
+    padding: 3rem 16rem;
   }
   @media (max-width: ${props => props.theme.breakpoints.mobileL}) {
     padding: 2rem 1.5rem;
   }
   form {
+    margin: 0 auto;
+	  max-width: 850px;
     p {
       label,
       input {
         display: block;
       }
       input {
-        min-width: 275px;
+        min-width: 320px;
         margin-top: 0.5rem;
+        border: 1px ${props => props.theme.colorBorder} solid;
+        border-radius: 10px;
         :focus {
           outline: ${props => props.theme.colorPrimary} auto 5px;
         }
@@ -30,13 +35,15 @@ const ContactWrapper = styled.section`
         min-height: 150px;
         width: 100%;
         margin-top: 0.5rem;
+        border: 1px ${props => props.theme.colorBorder} solid;
+        border-radius: 10px;
         :focus {
           outline: ${props => props.theme.colorPrimary} auto 5px;
         }
       }
       button {
         border-radius: 10px;
-        border: 1px ${props => props.theme.colorPrimary} solid;
+        border: 1px ${props => props.theme.colorBorder} solid;
         :focus {
           outline: none;
           background-color: ${props => props.theme.colorPrimary};
@@ -59,13 +66,13 @@ const netlifyForm = () => (
         >
             <p>
             <label htmlFor="contact-name">
-                Name
+                Your Name
                 <input name="name" id="contact-name" type="text" required />
             </label>
             </p>
             <p>
             <label htmlFor="contact-email">
-                E-Mail <input name="email" id="contact-email" type="email" required />
+                Your E-Mail <input name="email" id="contact-email" type="email" required />
             </label>
             </p>
             <p>
@@ -74,7 +81,7 @@ const netlifyForm = () => (
             </label>
             </p>
             <p>
-                <button>Send</button>
+                <button>Say Hi!</button>
             </p>
             <input type="hidden" name="form-name" value="contact-form" />
         </form>
