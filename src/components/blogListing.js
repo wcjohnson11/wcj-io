@@ -5,22 +5,26 @@ import styled from "styled-components"
 
 const Post = styled.article`
     box-shadow: 0px 3px 10px rgba(25, 17, 34, 0.05);
-    padding: 1rem;
-    border-radius: 4px;
-    margin-bottom: 1rem;
+    padding: .8em;
+    margin-left: -.8em;
+    margin-right: -.8em;
+    border-radius: 10px;
+    margin-bottom: 1em;
+    @media (min-width: ${props => props.theme.breakpoints.laptop}) {
+        max-width: 900px;
+        padding: 1em;
+        margin-left: -1em;
+        margin-right: -1em;
+    }
     h3 {
         margin-bottom: 0;
     }
     a {
-        color: purple;
-        font-size: 0.8rem;
+        color: ${props => props.theme.colorPrimary};
         text-decoration: underline;
         &:hover {
             color: black;
         }
-    }
-    p {
-        font-size: 0.8rem;
     }
 `
 
@@ -61,7 +65,7 @@ const BlogListing = ({type}) => (
                     <h3>{node.frontmatter.title}</h3>
                     <p>{node.frontmatter.date}</p>
                     <p>{node.excerpt}</p>
-                    <Link to={`/blog${node.frontmatter.slug}`}>Read More</Link>
+                    <Link to={`/blog/${node.frontmatter.slug}`}>Read More</Link>
                 </Post>
             ))
         )}
