@@ -6,6 +6,12 @@ import { FaGithub, FaLinkedin, FaCodepen } from 'react-icons/fa';
 import { MdMailOutline } from 'react-icons/md';
 import styled, { css } from 'styled-components';
 
+// Set up smooth scrolling for all components inside layout
+if (typeof window !== "undefined") {
+  // eslint-disable-next-line global-require
+  require("smooth-scroll")('a[href*="#"]')
+}
+
 const HeaderWrapper = styled.header`
 	background-color: ${(props) => props.theme.colorBackground};
 	color: ${(props) => props.theme.colorPrimary};
@@ -82,18 +88,6 @@ const HeaderLink = styled(Link)`
   }
   ${(props) => (props.primary ? css`font-size: 1.5rem;` : css`font-size: .8rem;`)};
 `;
-
-const ContactLink = styled.a`
-  color: ${(props) => props.theme.colorBase};
-  text-decoration: none;
-  font-weight: ${(props) => props.theme.fontBold};
-  font-family: 'Merriweather', serif;
-  :hover {
-    color: ${(props) => props.theme.colorPrimary};
-    border-color: ${(props) => props.theme.colorPrimary};
-  }
-  ${(props) => (props.primary ? css`font-size: 1.5rem;` : css`font-size: .8rem;`)};
-`
 
 const HeaderNavLink = styled.a`
 	display: inline-block;
@@ -178,7 +172,7 @@ const Header = ({ description, location, siteName, siteTitle }) => {
 						<HeaderLink to="/projects">projects</HeaderLink>
 					</HeaderBottomLeft>
 					<HeaderBottomRight>
-						<ContactLink href="#contact">contact</ContactLink>
+						<HeaderLink to={`${location.pathname}#contact`}>contact</HeaderLink>
 					</HeaderBottomRight>
 				</HeaderBottom>
 			</HeaderContainer>

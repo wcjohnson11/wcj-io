@@ -29,6 +29,7 @@
     "react-icons": "^3.5.0",
     "react-spring": "^8.0.14",
     "react-typography": "^0.16.18",
+    "smooth-scroll": "^16.0.3",
     "styled-components": "^4.1.3",
     "typography": "^0.16.18",
     "typography-theme-us-web-design-standards": "^0.16.18"
