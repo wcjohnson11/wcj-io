@@ -19,11 +19,13 @@ const HeaderWrapper = styled.header`
 
 const HeaderContainer = styled.header`
 	margin: 0 auto;
-	max-width: 850px;
-	padding: .4rem .4rem;
-	@media (max-width: ${(props) => props.theme.breakpoints.tablet}) {
-		margin-left: .9rem;
-		margin-right: .9rem;
+	max-width: 95%;
+	padding: .3rem .3rem;
+	@media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
+		max-width: 90%;
+	}
+	@media (min-width: ${props => props.theme.breakpoints.laptop}) {
+		max-width: 880px;
 	}
 `;
 
