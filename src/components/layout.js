@@ -6,7 +6,8 @@ import styled, { ThemeProvider } from 'styled-components';
 import Header from './header';
 import SEO from './seo';
 import NetlifyForm from './netlifyForm'
-import theme from '../utils/theme';
+import Footer from './footer'
+import theme from '../utils/theme'
 import './layout.css';
 
 const LayoutWrapper = styled.div`
@@ -26,11 +27,6 @@ const MainLayout = styled.main`
 	@media (max-width: ${(props) => props.theme.breakpoints.tablet}) {
 		max-width: 98%;
 	}
-`;
-
-const Footer = styled.footer`
-	text-align: center;
-	flex-shrink: 0;
 `;
 
 const Layout = ({ children, location }) => (
@@ -66,10 +62,8 @@ const Layout = ({ children, location }) => (
 					<MainLayout>
 						<div>{children}</div>
 					</MainLayout>
-					<NetlifyForm />
-					<Footer>
-						© {new Date().getFullYear()}, Built by {site.siteMetadata.title}
-					</Footer>
+					{ location.pathname !== "/success" && <NetlifyForm /> }
+					<Footer title={site.siteMetadata.title} />
 				</LayoutWrapper>
 			</ThemeProvider>
 		)}
