@@ -19,13 +19,14 @@ const LayoutWrapper = styled.div`
 
 const MainLayout = styled.main`
 	flex-grow: 1;
-	max-width: 90%;
-	margin: 1rem auto;
-	display: grid;
-	grid-template-columns: 1fr;
-	grid-gap: 40px;
-	@media (max-width: ${(props) => props.theme.breakpoints.tablet}) {
-		max-width: 98%;
+	margin: 0 auto;
+	max-width: 95%;
+	padding: .3rem .3rem;
+	@media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
+		max-width: 90%;
+	}
+	@media (min-width: ${props => props.theme.breakpoints.laptop}) {
+		max-width: 880px;
 	}
 `;
 
@@ -60,7 +61,7 @@ const Layout = ({ children, location }) => (
 						]}
 					/>
 					<MainLayout>
-						<div>{children}</div>
+						{children}
 					</MainLayout>
 					{ location.pathname !== "/success" && <NetlifyForm /> }
 					<Footer title={site.siteMetadata.title} />
