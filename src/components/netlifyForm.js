@@ -18,7 +18,8 @@ const ContactWrapper = styled.section`
 	  max-width: 850px;
     p {
       label,
-      input {
+      input,
+      textarea {
         display: block;
       }
       input {
@@ -81,7 +82,7 @@ const netlifyForm = () => (
             </label>
             </p>
             <p>
-                <button>Say Hi!</button>
+                <button>Send it!</button>
             </p>
             <input type="hidden" name="form-name" value="contact-form" />
         </form>
