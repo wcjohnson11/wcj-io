@@ -5,8 +5,9 @@ import styled, { ThemeProvider } from 'styled-components';
 
 import Header from './header';
 import SEO from './seo';
-import './layout.css';
+import NetlifyForm from './netlifyForm'
 import theme from '../utils/theme';
+import './layout.css';
 
 const LayoutWrapper = styled.div`
 	min-height: 100vh;
@@ -65,6 +66,7 @@ const Layout = ({ children, location }) => (
 					<MainLayout>
 						<div>{children}</div>
 					</MainLayout>
+					<NetlifyForm />
 					<Footer>
 						© {new Date().getFullYear()}, Built by {site.siteMetadata.title}
 					</Footer>
