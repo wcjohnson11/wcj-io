@@ -11,7 +11,6 @@ const Post = styled.article`
     border-radius: 10px;
     margin-bottom: 1em;
     @media (min-width: ${props => props.theme.breakpoints.laptop}) {
-        max-width: 900px;
         padding: 1em;
         margin-left: -1em;
         margin-right: -1em;
