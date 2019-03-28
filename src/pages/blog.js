@@ -1,14 +1,13 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
 
-import Layout from '../components/layout'
-import BlogListing from '../components/blogListing'
+import Layout from '../components/layout';
+import BlogListing from '../components/blogListing';
 
-const Blog = ({location}) => (
-    <Layout location={location}>
-        <h1>Blog</h1>
-        <BlogListing />
-    </Layout>
-)
+const Blog = ({ location }) => (
+	<Layout location={location}>
+		<h1>Blog</h1>
+		<BlogListing />
+	</Layout>
+);
 
-export default Blog
+export default Blog;
