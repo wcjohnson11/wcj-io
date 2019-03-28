@@ -19,14 +19,14 @@ const LayoutWrapper = styled.div`
 
 const MainLayout = styled.main`
 	flex-grow: 1;
-	margin: 0 auto;
-	max-width: 95%;
-	padding: .3rem .3rem;
+	margin: ${props => props.theme.margin} auto;
+	max-width: ${props => props.theme.maxWidth};
+	padding: ${props => props.theme.padding};
 	@media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
-		max-width: 90%;
+		max-width: ${props => props.theme.maxWidthTablet};
 	}
 	@media (min-width: ${props => props.theme.breakpoints.laptop}) {
-		max-width: 880px;
+		max-width: ${props => props.theme.maxWidthLaptop};
 	}
 `;
 
