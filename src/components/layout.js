@@ -21,7 +21,7 @@ const MainLayout = styled.main`
 	flex-grow: 1;
 	margin: ${props => props.theme.margin} auto;
 	max-width: ${props => props.theme.maxWidth};
-	padding: ${props => props.theme.padding};
+	padding: .8em;
 	@media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
 		max-width: ${props => props.theme.maxWidthTablet};
 	}
