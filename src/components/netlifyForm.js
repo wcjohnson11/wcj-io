@@ -17,7 +17,7 @@ const ContactWrapper = styled.section`
 		margin: 0 auto;
 		max-width: ${(props) => props.theme.maxWidth};
 		p {
-      margin-bottom: .5em;
+			margin-bottom: .5em;
 			label,
 			input,
 			textarea {

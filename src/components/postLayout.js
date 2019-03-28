@@ -9,14 +9,14 @@ export default class postLayout extends Component {
 		const { location } = this.props;
 		return (
 			<Layout location={location}>
-				<>
+				<React.Fragment>
 					<h1>{markdownRemark.frontmatter.title}</h1>
 					<div
 						dangerouslySetInnerHTML={{
 							__html : markdownRemark.html
 						}}
 					/>
-				</>
+				</React.Fragment>
 				<Archive />
 			</Layout>
 		);

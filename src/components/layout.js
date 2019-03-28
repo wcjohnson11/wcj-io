@@ -5,9 +5,9 @@ import styled, { ThemeProvider } from 'styled-components';
 
 import Header from './header';
 import SEO from './seo';
-import NetlifyForm from './netlifyForm'
-import Footer from './footer'
-import theme from '../utils/theme'
+import NetlifyForm from './netlifyForm';
+import Footer from './footer';
+import theme from '../utils/theme';
 import './layout.css';
 
 const LayoutWrapper = styled.div`
@@ -19,14 +19,14 @@ const LayoutWrapper = styled.div`
 
 const MainLayout = styled.main`
 	flex-grow: 1;
-	margin: ${props => props.theme.margin} auto;
-	max-width: ${props => props.theme.maxWidthMobile};
+	margin: ${(props) => props.theme.margin} auto;
+	max-width: ${(props) => props.theme.maxWidthMobile};
 	padding: .5em;
 	@media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
-		max-width: ${props => props.theme.maxWidthTablet};
+		max-width: ${(props) => props.theme.maxWidthTablet};
 	}
-	@media (min-width: ${props => props.theme.breakpoints.laptop}) {
-		max-width: ${props => props.theme.maxWidth};
+	@media (min-width: ${(props) => props.theme.breakpoints.laptop}) {
+		max-width: ${(props) => props.theme.maxWidth};
 	}
 `;
 
@@ -60,10 +60,8 @@ const Layout = ({ children, location }) => (
 							`react`
 						]}
 					/>
-					<MainLayout>
-						{children}
-					</MainLayout>
-					{ location.pathname !== "/success" && <NetlifyForm /> }
+					<MainLayout>{children}</MainLayout>
+					{location.pathname !== '/success' && <NetlifyForm />}
 					<Footer title={site.siteMetadata.title} />
 				</LayoutWrapper>
 			</ThemeProvider>
