@@ -10,15 +10,18 @@ const theme = {
 	fontHeavy       : 800,
 	height          : '4rem',
 	margin          : '2rem',
+	maxWidth        : '880px',
+	maxWidthMobile  : '95%',
+	maxWidthTablet  : '90%',
 	radius          : '.6rem',
 	breakpoints     : {
-		mobileS: '320px',
-  		mobileM: '375px',
-  		mobileL: '425px',
-  		tablet: '768px',
-  		laptop: '1024px',
-  		laptopL: '1440px',
-  		desktop: '2560px'
+		mobileS : '320px',
+		mobileM : '375px',
+		mobileL : '425px',
+		tablet  : '768px',
+		laptop  : '1024px',
+		laptopL : '1440px',
+		desktop : '2560px'
 	}
 };
 
