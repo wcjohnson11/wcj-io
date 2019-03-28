@@ -9,7 +9,8 @@ const StyledFooter = styled.footer`
 
 const Footer = ({ location, title }) => (
     <StyledFooter>
-        © {new Date().getFullYear()}, Built by {title}
+        © {new Date().getFullYear()}, {title}
+        <p>Be excellent to each other</p>
     </StyledFooter>
 );
 
