@@ -20,13 +20,13 @@ const LayoutWrapper = styled.div`
 const MainLayout = styled.main`
 	flex-grow: 1;
 	margin: ${props => props.theme.margin} auto;
-	max-width: ${props => props.theme.maxWidth};
-	padding: .8em;
+	max-width: ${props => props.theme.maxWidthMobile};
+	padding: .5em;
 	@media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
 		max-width: ${props => props.theme.maxWidthTablet};
 	}
 	@media (min-width: ${props => props.theme.breakpoints.laptop}) {
-		max-width: ${props => props.theme.maxWidthLaptop};
+		max-width: ${props => props.theme.maxWidth};
 	}
 `;
 
