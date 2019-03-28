@@ -20,7 +20,7 @@ const HeaderWrapper = styled.header`
 const HeaderContainer = styled.header`
 	margin: 0 auto;
 	max-width: ${(props) => props.theme.maxWidthMobile};
-	padding: .3rem .3rem;
+	padding: ${props => props.theme.padding} ${props => props.theme.padding};
 	@media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
 		max-width: ${(props) => props.theme.maxWidthTablet};
 	}
@@ -42,13 +42,13 @@ const HeaderBottom = styled.div`
 	justify-content: space-between;
 	align-items: center;
 	width: 100%;
-	margin-bottom: 10px;
+	margin-bottom: ${props => props.theme.padding};
 `;
 
 const HeaderBottomLeft = styled.div`
-	margin: 0 20px 0 -10px;
+	margin: 0 ${props => props.theme.margin} 0 -${props => props.theme.padding};
 	a {
-		padding: 10px 10px;
+		padding: ${props => props.theme.padding};
 	}
 	a[aria-current] {
 		text-decoration: underline;
@@ -57,10 +57,10 @@ const HeaderBottomLeft = styled.div`
 `;
 
 const HeaderBottomRight = styled.div`
-	margin: 0 -10px 0 10px;
+	margin: 0 -${props => props.theme.padding} 0 ${props => props.theme.padding};
 	a {
 		display: inline-block;
-		padding: 5px 10px;
+		padding: ${props => props.theme.padding};
 		/* border: ${(props) => props.theme.colorBorder} 1px solid; */
 		/* border-radius: ${(props) => props.theme.radius}; */
 		color: ${(props) => props.theme.colorBase};
@@ -73,7 +73,7 @@ const HeaderBottomRight = styled.div`
 const HeaderNavList = styled.ul`
 	display: flex;
 	align-items: center;
-	margin: 0 -10px 0 10px;
+	margin: 0 -${props => props.theme.padding} 0 ${props => props.theme.padding};
 `;
 
 const HeaderLink = styled(Link)`
@@ -93,7 +93,7 @@ const HeaderLink = styled(Link)`
 
 const HeaderNavLink = styled.a`
 	display: inline-block;
-	padding: 10px 12.5px;
+	padding: ${props => props.theme.padding};
 	fill: ${(props) => props.theme.colorBase};
 	text-decoration: none;
 	svg {
