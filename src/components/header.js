@@ -7,9 +7,9 @@ import { MdMailOutline } from 'react-icons/md';
 import styled, { css } from 'styled-components';
 
 // Set up smooth scrolling for all components inside layout
-if (typeof window !== "undefined") {
-  // eslint-disable-next-line global-require
-  require("smooth-scroll")('a[href*="#"]')
+if (typeof window !== 'undefined') {
+	// eslint-disable-next-line global-require
+	require('smooth-scroll')('a[href*="#"]');
 }
 
 const HeaderWrapper = styled.header`
@@ -19,13 +19,13 @@ const HeaderWrapper = styled.header`
 
 const HeaderContainer = styled.header`
 	margin: 0 auto;
-	max-width: 95%;
+	max-width: ${(props) => props.theme.maxWidthMobile};
 	padding: .3rem .3rem;
 	@media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
-		max-width: 90%;
+		max-width: ${(props) => props.theme.maxWidthTablet};
 	}
-	@media (min-width: ${props => props.theme.breakpoints.laptop}) {
-		max-width: 880px;
+	@media (min-width: ${(props) => props.theme.breakpoints.laptop}) {
+		max-width: ${(props) => props.theme.maxWidth};
 	}
 `;
 
@@ -62,10 +62,10 @@ const HeaderBottomRight = styled.div`
 		display: inline-block;
 		padding: 5px 10px;
 		/* border: ${(props) => props.theme.colorBorder} 1px solid; */
+		/* border-radius: ${(props) => props.theme.radius}; */
 		color: ${(props) => props.theme.colorBase};
 		font-size: .8rem;
 		line-height: .8rem;
-		/* border-radius: ${(props) => props.theme.radius}; */
 		opacity: 0.9;
 	}
 `;
