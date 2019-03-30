@@ -38,7 +38,10 @@ And that's it, now all links across the site will add the previous url pathname 
 Stored in a variable, it would look like this.
 
 ```
-const isHomepageTransition = (location.state && location.state.prevUrlPath === '/') || location.pathname === '/';
+const isHomepageTransition = (
+    location.state &&
+    location.state.prevUrlPath === '/'
+) || location.pathname === '/';
 ```
 
 I then use this variable to determine whether or not the expand/collapse animation occurs.
