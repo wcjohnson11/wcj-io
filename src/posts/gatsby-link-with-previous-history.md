@@ -10,9 +10,9 @@ tags:
 ---
 When building this site, I wanted to have route specific animation behavior for the header. In order to do this, I needed to have access to both the current and the previous page's path.
 
-Gatsby uses [Reach Router](https://reach.tech/router/) under the hood for its routing. It's a great, newer router option for React that was built with accessibility in mind.
+Gatsby uses [Reach Router](https://reach.tech/router/) under the hood for its routing. It's a great, newer router for React that was built with accessibility in mind.
 
-Reach Router's API's include a [Location Component](https://reach.tech/router/api/Location) that provides the location anywhere in the app via a child render prop. By wrapping [Gatsby's Link Component](https://www.gatsbyjs.org/docs/gatsby-link/) in the Location Component, I'm able to create a custom Link component that will always pass the previous URL path into the location props via its state.
+Reach Router includes a [Location Component](https://reach.tech/router/api/Location) that provides the location anywhere in the app via a child render prop. After wrapping [Gatsby's Link Component](https://www.gatsbyjs.org/docs/gatsby-link/) in the Location Component, I'm able to create a custom Link component that will always pass the previous URL path into the location prop via its state.
 
 ```
 import React from 'react';
@@ -40,3 +40,5 @@ Stored in a variable, it would look like this.
 ```
 const isHomepageTransition = (location.state && location.state.prevUrlPath === '/') || location.pathname === '/';
 ```
+
+I then use this variable to determine whether or not the expand/collapse animation occurs.
