@@ -30,7 +30,7 @@ collections:
       - { label: "Date", name: "date", widget: "datetime"}
       - { label: "Tags", name: "tags", widget: "list"}
       - { label: "Content", name: "body", widget: "markdown"}
-      - { label: "Optional Content", name: "optionalContent", widget: "list", fields:
+      - { label: "Filterable Content", name: "filterableContent", widget: "list", fields:
         - { label: "Name", name: "name", widget: "string" }
         - { label: "Markdown", name: "markdown", widget: "markdown"}
         }
