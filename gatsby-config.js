@@ -44,6 +44,7 @@ module.exports = {
 					// go before gatsby-remark-images
 					// https://github.com/danielmahon/gatsby-remark-relative-images
 					`gatsby-remark-relative-images`,
+					`gatsby-remark-prismjs`,
 					{
 						resolve : `gatsby-remark-images`,
 						options : {
