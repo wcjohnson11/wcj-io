@@ -1,8 +1,24 @@
 const path = require('path')
 const { fmImagesToRelative } = require('gatsby-remark-relative-images');
+const remark = require('remark');
+const remarkHTML = require('remark-html');
 
-exports.onCreateNode = ({ node }) => {
-  fmImagesToRelative(node);
+exports.onCreateNode = ({ node, actions }) => {
+    const { createNodeField } = actions;
+    fmImagesToRelative(node);
+    if (node.frontmatter && node.frontmatter.sections) {
+        node.frontmatter.sections.forEach(section => {
+            const { name, markdown } = section;
+            createNodeField({
+                node,
+                name: name,
+                value: remark()
+                    .use(remarkHTML)
+                    .processSync(markdown)
+                    .toString()
+            })
+        })
+  }
 };
 
 exports.createPages = ({ graphql, actions }) => {
