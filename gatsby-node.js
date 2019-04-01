@@ -6,6 +6,7 @@ const remarkHTML = require('remark-html');
 exports.onCreateNode = ({ node, actions }) => {
     const { createNodeField } = actions;
     fmImagesToRelative(node);
+    // Create HTML nodes for project sections
     if (node.frontmatter && node.frontmatter.sections) {
         node.frontmatter.sections.forEach(section => {
             const { name, markdown } = section;
