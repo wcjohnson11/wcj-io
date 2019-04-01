@@ -79,7 +79,7 @@ sections:
       Of the metrics analyzed here, **Happy Planet Index** and **World Happiness
       Report Score** are the only ones to measure subjective well-being.They
       take responses to the World Gallup Poll survey question that asks people
-      to rank their happiness on a scale of zero to 10.The **HPI** is a
+      to rank their happiness on a scale of zero to ten.The **HPI** is a
       composite of subjective well-being and objective well-being metrics while
       the **WHRS** is purely a measurement of subjective well-being.
 
