@@ -8,7 +8,6 @@ import SEO from './seo';
 import NetlifyForm from './netlifyForm';
 import Footer from './footer';
 import theme from '../utils/theme';
-import './layout.css';
 
 const LayoutWrapper = styled.div`
 	min-height: 100vh;
