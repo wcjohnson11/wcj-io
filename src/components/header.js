@@ -46,7 +46,7 @@ const HeaderBottom = styled.div`
 `;
 
 const HeaderBottomLeft = styled.div`
-	margin: 0 ${(props) => props.theme.margin} 0 -${(props) => props.theme.padding};
+	margin: 0 ${(props) => props.theme.margin} 0 -.3em;
 	a {
 		padding: ${(props) => props.theme.padding};
 	}
