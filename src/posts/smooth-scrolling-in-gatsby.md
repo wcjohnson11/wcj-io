@@ -27,12 +27,13 @@ I found [this article from Chris Fitkin](https://medium.com/@chrisfitkin/how-to-
    `npm install --save smooth-scroll`.
 
 2. At the top of my `layout.js`, a template component that wraps all of the other components of my site inside of it, I included the following after the `import` statements but before the component is rendered. This attaches `smooth-scroll` to all a tags, which Gatsby Link is under the hood, with a to value containing a hashtag.
-    ```javascript
+
+```js
     if (typeof window !== "undefined") {
       // eslint-disable-next-line global-require
       require("smooth-scroll")('a[href*="#"]')
     }
-    ```
+```
 
 3. I then added the id property to the element I wanted to navigate to, this was in my Contact Form component.
 

@@ -16,7 +16,7 @@ Gatsby uses [Reach Router](https://reach.tech/router/) under the hood for its ro
 
 I'm able to create a custom Link component that will always pass the previous URL path into the location prop via its state by wrapping [Gatsby's Link Component](https://www.gatsbyjs.org/docs/gatsby-link/) in the Reach Router Location Component
 
-```javascript
+```jsx
 import React from 'react';
 import { Location } from '@reach/router';
 import { Link } from 'gatsby';
