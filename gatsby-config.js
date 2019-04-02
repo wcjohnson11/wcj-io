@@ -44,7 +44,6 @@ module.exports = {
 					// go before gatsby-remark-images
 					// https://github.com/danielmahon/gatsby-remark-relative-images
 					`gatsby-remark-relative-images`,
-					`gatsby-remark-prismjs`,
 					{
 						resolve : `gatsby-remark-images`,
 						options : {
@@ -53,11 +52,16 @@ module.exports = {
 							// base for generating different widths of each image.
 							maxWidth : 590
 						}
-					}
+					},
+					{
+						resolve: `gatsby-remark-prismjs`,
+						options: {
+							inlineCodeMarker: '`',
+						},
+					},
 				]
 			}
 		},
-		`gatsby-transformer-remark`,
 		`gatsby-plugin-netlify`,
 		`gatsby-plugin-sitemap`,
 		`gatsby-plugin-netlify-cms`,
