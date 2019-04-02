@@ -28,7 +28,11 @@ const ArchiveList = styled.ul`
 
 const POST_ARCHIVE_QUERY = graphql`
 	query BlogArchiveQuery {
-		allMarkdownRemark(limit: 5, sort: { order: DESC, fields: [frontmatter___date] }) {
+		allMarkdownRemark(
+			limit: 5
+			sort: { order: DESC, fields: [frontmatter___date] }
+			filter: { fileAbsolutePath: { regex: "/posts/" } }
+		) {
 			edges {
 				node {
 					excerpt
@@ -52,7 +56,7 @@ const Archive = () => (
 					<ArchiveList>
 						{allMarkdownRemark.edges.map((edge) => (
 							<li key={edge.node.frontmatter.slug}>
-								<Link to={`/blog${edge.node.frontmatter.slug}`}>{edge.node.frontmatter.title}</Link>
+								<Link to={`/blog/${edge.node.frontmatter.slug}`}>{edge.node.frontmatter.title}</Link>
 							</li>
 						))}
 					</ArchiveList>

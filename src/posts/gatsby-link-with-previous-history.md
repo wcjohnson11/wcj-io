@@ -33,9 +33,10 @@ const LinkWithPrevUrl = ({ children, state, ...rest }) => (
 
 export { LinkWithPrevUrl as Link };
 ```
-And that's it, now all links across the site will add the previous url pathname to the location property to allow for transitions based on whether the user has navigated to or from the homepage.
 
-Stored in a variable, it would look like this.
+And that's it, now all links across the site will add the previous url pathname to location's state to allow for transitions based on whether the user has just navigated to or from the homepage.
+
+Stored in a variable, it would look like this, first checking that location has state and then checking whether the previous URL path or current path are equal to the index's path.
 
 ```javascript
 const isHomepageTransition = (
