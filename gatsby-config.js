@@ -15,6 +15,12 @@ module.exports = {
 			}
 		},
 		{
+			resolve:`gatsby-transformer-csv`,
+			options: {
+				noheader: false,
+			}
+		},
+		{
 			resolve : `gatsby-source-filesystem`,
 			options : {
 				name : `data`,
