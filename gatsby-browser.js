@@ -6,3 +6,4 @@
 
 // You can delete this file if you're not using it
 require("prismjs/themes/prism-coy.css");
+require("normalize.css/normalize.css");
