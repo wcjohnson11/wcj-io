@@ -17,7 +17,7 @@ const HeaderWrapper = styled.header`
 	color: ${(props) => props.theme.colorPrimary};
 `;
 
-const HeaderContainer = styled.header`
+const HeaderContainer = styled.div`
 	margin: 0 auto;
 	max-width: ${(props) => props.theme.maxWidthMobile};
 	padding: ${(props) => props.theme.padding} ${(props) => props.theme.padding};
