@@ -12,7 +12,11 @@ const DropdownSelect = ({ currentSelection, handleChange, isMulti, options, them
 			...provided,
 			background : state.isSelected
 				? theme.colorPrimary
-				: state.isFocused ? chroma(theme.colorPrimary).alpha(0.3).css() : theme.colorBackground
+				: state.isFocused ? chroma(theme.colorPrimary).alpha(0.3).css() : `transparent`,
+			WebkitTapHighlightColor: theme.colorPrimary,
+			':active': {
+				backgroundColor: state.isSelected ? theme.colorPrimary : theme.colorBackground
+			}
 		}),
 		control           : (provided, state) => ({
 			...provided,
