@@ -5,6 +5,7 @@
   "author": "William Johnson <will@wcj.io>",
   "dependencies": {
     "babel-plugin-styled-components": "^1.10.0",
+    "chroma-js": "^2.0.3",
     "d3": "^5.9.2",
     "gatsby": "^2.3.4",
     "gatsby-image": "^2.0.31",

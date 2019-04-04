@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { graphql } from 'gatsby';
-import Select from 'react-select';
 
-import Layout from '../../components/layout.js';
+import Layout from '../../components/layout';
 import MarkdownDiv from '../../components/markdownDiv';
+import DropdownSelect from '../../components/dropdownSelect';
 
 // Mapping of metrics to markdownRemark keys
 const metrics = [
@@ -14,8 +14,9 @@ const metrics = [
 	{ label: 'World Happiness Report Score', value: 'World_Happiness_Report_Score' }
 ];
 
-const WellBeing = ({ data, location }) => {
+const WellBeing = (props) => {
 	// Set up component state
+	const { data, location} = props;
 	const [
 		metric,
 		setMetric
@@ -38,17 +39,10 @@ const WellBeing = ({ data, location }) => {
 			<small>{frontmatter.date}</small>
 			<MarkdownDiv content={sectionHTML['Introduction']} />
 			<MarkdownDiv content={sectionHTML['Beyond_GDP']} />
-			<Select
-				value={{ label: metric.label, value: metric.value }}
-				onChange={handleMetricChange}
-				controlShouldRenderValue={true}
-				options={metrics.map((metric) => {
-					return {
-						label : metric.label,
-						value : metric.value
-					};
-				})}
-				blurInputOnSelect={false}
+			<DropdownSelect
+				currentSelection={metric}
+				options={metrics}
+				handleChange={handleMetricChange}
 				isMulti={false}
 			/>
 			<MarkdownDiv content={sectionHTML[metric.value]} />
