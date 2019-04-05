@@ -34,7 +34,7 @@ const DropdownSelect = ({ currentSelection, handleChange, isMulti, options, them
 
 	return (
 		<Select
-			value={{ label: currentSelection.label, value: currentSelection.value }}
+			value={currentSelection}
 			onChange={handleChange}
 			controlShouldRenderValue={true}
 			options={options}
