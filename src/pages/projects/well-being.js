@@ -3,6 +3,7 @@ import { graphql } from 'gatsby';
 
 import Layout from '../../components/layout';
 import MarkdownDiv from '../../components/markdownDiv';
+import MultiLine from '../../components/visualizations/multiline';
 import DropdownSelect from '../../components/dropdownSelect';
 
 // Mapping of metrics to markdownRemark keys
@@ -14,19 +15,31 @@ const metrics = [
 	{ label: 'World Happiness Report Score', value: 'World_Happiness_Report_Score' }
 ];
 
-const WellBeing = (props) => {
+const WellBeing = ({ data, location }) => {
+	console.log('sup');
 	// Set up component state
-	const { data, location} = props;
 	const [
 		metric,
 		setMetric
 	] = useState(metrics[0]);
+
 	// Extract sectionHTML from markdownRemark
 	const { fields, frontmatter } = data.markdownRemark;
 	const sectionHTML = {};
 	for (var field in fields) {
 		sectionHTML[field] = fields[field];
 	}
+
+	// Extract gdp data from allGdpovertimeCsv
+	const { edges } = data.allGdpovertimeCsv;
+
+	const countryOptions = [];
+	const countrySet = [
+		...new Set(edges.map(({ node }) => node.Entity))
+	];
+	countrySet[0].forEach((key, value, set) => {
+		countryOptions.push({ label: value, value: value });
+	});
 
 	// handle <Select> onChange for metric
 	function handleMetricChange(metric){
@@ -38,6 +51,7 @@ const WellBeing = (props) => {
 			<h1>{frontmatter.title}</h1>
 			<small>{frontmatter.date}</small>
 			<MarkdownDiv content={sectionHTML['Introduction']} />
+			<MultiLine countryOptions={countryOptions} />
 			<MarkdownDiv content={sectionHTML['Beyond_GDP']} />
 			<DropdownSelect
 				currentSelection={metric}
@@ -72,6 +86,16 @@ export const query = graphql`
 				sections {
 					markdown
 					name
+				}
+			}
+		}
+		allGdpovertimeCsv {
+			edges {
+				node {
+					Entity
+					Code
+					Year
+					GDP_per_capita
 				}
 			}
 		}
