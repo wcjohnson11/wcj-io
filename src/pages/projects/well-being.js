@@ -34,10 +34,10 @@ const WellBeing = ({ data, location }) => {
 
 	// Create unique set of country names then create options array for multiline dropdown select
 	const countrySet = [
-		...new Set(edges.map(({ node }) => node.Entity))
+		new Set(edges.map(({ node }) => node.Entity))
 	];
 	const countryOptions = [];
-	countrySet[0].forEach((key, value, set) => {
+	countrySet.forEach((key, value, set) => {
 		countryOptions.push({ label: value, value: value });
 	});
 
