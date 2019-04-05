@@ -32,10 +32,11 @@ const WellBeing = ({ data, location }) => {
 	// Extract gdp data from allGdpovertimeCsv
 	const { edges } = data.allGdpovertimeCsv;
 
-	const countryOptions = [];
+	// Create unique set of country names then create options array for multiline dropdown select
 	const countrySet = [
 		...new Set(edges.map(({ node }) => node.Entity))
 	];
+	const countryOptions = [];
 	countrySet[0].forEach((key, value, set) => {
 		countryOptions.push({ label: value, value: value });
 	});
