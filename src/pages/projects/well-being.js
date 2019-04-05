@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { graphql } from 'gatsby';
+import { set } from 'd3';
 
 import Layout from '../../components/layout';
 import MarkdownDiv from '../../components/markdownDiv';
@@ -31,14 +32,13 @@ const WellBeing = ({ data, location }) => {
 
 	// Extract gdp data from allGdpovertimeCsv
 	const { edges } = data.allGdpovertimeCsv;
-
+	const multilineData = edges.map(({node}) => {
+		return node;
+	})
 	// Create unique set of country names then create options array for multiline dropdown select
-	const countrySet = [
-		new Set(edges.map(({ node }) => node.Entity))
-	];
-	const countryOptions = [];
-	countrySet.forEach((key, value, set) => {
-		countryOptions.push({ label: value, value: value });
+	const countrySet = set(multilineData.map(node => node.Entity)).values();
+	const countryOptions = countrySet.map((value) => {
+		return { label: value, value: value };
 	});
 
 	// handle <Select> onChange for metric
@@ -51,7 +51,7 @@ const WellBeing = ({ data, location }) => {
 			<h1>{frontmatter.title}</h1>
 			<small>{frontmatter.date}</small>
 			<MarkdownDiv content={sectionHTML['Introduction']} />
-			<MultiLine countryOptions={countryOptions} />
+			<MultiLine countryOptions={countryOptions} data={multilineData} />
 			<MarkdownDiv content={sectionHTML['Beyond_GDP']} />
 			<DropdownSelect
 				currentSelection={metric}
