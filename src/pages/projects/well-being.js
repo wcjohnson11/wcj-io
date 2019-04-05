@@ -16,7 +16,6 @@ const metrics = [
 ];
 
 const WellBeing = ({ data, location }) => {
-	console.log('sup');
 	// Set up component state
 	const [
 		metric,
