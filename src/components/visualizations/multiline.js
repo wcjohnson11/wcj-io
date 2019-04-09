@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { extent, scaleLinear, scaleTime } from 'd3';
 
 import DropdownSelect from '../dropdownSelect';
 
-const margin = { top: 20, right: 20, bottom: 40, left: 45 };
+const margin = { top: 20, right: 20, bottom: 20, left: 20 };
 const height= 500;
 const width = 700;
 const MultiLine = ({ countryOptions, data }) => {
@@ -19,12 +19,19 @@ const MultiLine = ({ countryOptions, data }) => {
 		{ label: 'Germany', value: 'Germany' },
 		{ label: 'France', value: 'France' }
 	]);
+    // Declare Axis Refs
+    const xAxisRef = useRef(null);
+    const yAxisRef = useRef(null);
 
 	// Get list of active countries
 	const activeCountries = selected.map((d) => d.value);
 
 	// Get filtered Data for active countries
 	const filteredData = data.filter((d) => activeCountries.indexOf(d.Entity) >= 0);
+
+    // Declare Axis
+    const xAxis = axisBottom().tickOuterSize(0);
+    const yAxis = axisLeft().tickOuterSize(0);
 
     // Declare x and y Scales
     const xScale = scaleTime()
@@ -36,6 +43,7 @@ const MultiLine = ({ countryOptions, data }) => {
         .nice()
         .range([height - margin.bottom, margin.top]);
 
+    // Handle SelectionChange and update selected state
 	function handleSelectionChange(selections){
 		setSelected(selections);
 	}
