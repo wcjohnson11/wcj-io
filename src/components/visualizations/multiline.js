@@ -49,6 +49,15 @@ const MultiLine = ({ countryOptions, data }) => {
         .x(d => xScale(d.Year))
         .y(d => yScale(d["GDP per capita"]))
 
+    // Declare voronoi function
+    const voronoiFn = voronoi()
+        .x(d => xScale(d.Year))
+        .y(d => yScale(d["GDP per capita"]))
+        .extent([
+            [-margin.left, -margin.top],
+            [width + margin.right, height + margin.bottom]
+        ]);
+
     // Handle SelectionChange and update selected state
 	function handleSelectionChange(selections){
 		setSelected(selections);
