@@ -73,8 +73,8 @@ const MultiLine = ({ countryOptions, data }) => {
 		]
 	]);
 
-	// Handle mouseover function
-	function mouseover(d, xScale, yScale){
+	// Handle mouseOver event
+	function mouseOver(d, xScale, yScale){
 		// Set color of moused over line
 		selectAll('.line').attr('stroke', (el) => {
 			return d.data.Entity === el.key ? 'steelblue' : '#ddd';
@@ -83,14 +83,26 @@ const MultiLine = ({ countryOptions, data }) => {
 		d.data.line.parentNode.appendChild(d.data.line);
 		// Move focus into viewbox
 		d3Select('.focus').attr('transform', `translate(${xScale(d.data.Year)}, ${yScale(d.data['GDP per capita'])})`);
-        // Set opacity of hoverGroup to 1
-        d3Select('.hoverGroup').transition().style("opacity", 1);
-        // Set text styles, attributes and value
-        d3Select('.hoverText')
-            .style('font-size', .9em)
-            .style("text-anchor", "middle")
-            .attr("y", margin.top * 1.5)
-            .text(d.data.Entity);
+		// Set opacity of hoverGroup to 1
+		d3Select('.hoverGroup').transition().style('opacity', 1);
+		// Set text styles, attributes and value
+		d3Select('.hoverText')
+			.style('font-size', '.9em')
+			.style('text-anchor', 'middle')
+			.attr('y', margin.top * 1.5)
+			.text(d.data.Entity);
+	}
+
+	// Handle mouseOut event
+	function mouseOut(d){
+		// Turn all lines gray
+		selectAll('.line').attr('stroke', '#ddd');
+		// Set opacity to 0
+		d3Select('.hoverGroup').transition().style('opacity', 0);
+		// Set hover text value to 0
+		d3Select('.hoverText').text('');
+		// Move focus element out of viewbox
+		d3Select('.focus').attr('transform', 'translate(-100, -100)');
 	}
 
 	// Handle SelectionChange and update selected state
