@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { graphql } from 'gatsby';
-import { set } from 'd3';
+import { nest } from 'd3';
 
 import Layout from '../../components/layout';
 import MarkdownDiv from '../../components/markdownDiv';
@@ -32,13 +32,14 @@ const WellBeing = ({ data, location }) => {
 
 	// Extract gdp data from allGdpovertimeCsv
 	const { edges } = data.allGdpovertimeCsv;
-	const multilineData = edges.map(({node}) => {
+	const multilineNodes = edges.map(({ node }) => {
 		return node;
-	})
+	});
+	// Nest data in array of objects, keyed by country name
+	const multilineData = nest().key((d) => d.Entity).entries(multilineNodes);
 	// Create unique set of country names then create options array for multiline dropdown select
-	const countrySet = set(multilineData.map(node => node.Entity)).values();
-	const countryOptions = countrySet.map((value) => {
-		return { label: value, value: value };
+	const countryOptions = multilineData.map((country) => {
+		return { label: country.key, value: country.key };
 	});
 
 	// handle <Select> onChange for metric

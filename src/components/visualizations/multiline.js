@@ -9,10 +9,10 @@ import {
 	scaleLinear,
 	scaleTime,
 	select as d3Select,
-    selectAll,
+	selectAll,
 	voronoi
 } from 'd3';
-import { merge } from "d3-array";
+import { merge } from 'd3-array';
 
 import DropdownSelect from '../dropdownSelect';
 
@@ -25,7 +25,7 @@ const MultiLine = ({ countryOptions, data }) => {
 		setSelected
 	] = useState([
 		{ label: 'United States', value: 'United States' },
-		{ label: 'England', value: 'England' },
+		{ label: 'United Kingdom', value: 'United Kingdom' },
 		{ label: 'Japan', value: 'Japan' },
 		{ label: 'India', value: 'India' },
 		{ label: 'China', value: 'China' },
@@ -37,28 +37,29 @@ const MultiLine = ({ countryOptions, data }) => {
 	const activeCountries = selected.map((d) => d.value);
 
 	// Get filtered Data for active countries
-	const filteredData = data.filter((d) => activeCountries.indexOf(d.Entity) >= 0);
+	const filteredData = data.filter((d) => activeCountries.indexOf(d.key) >= 0);
 
-	// Nest data points by country
-	const [ nestedData, setNestedData ] = useState(
-        nest().key((d) => d.Entity).entries(filteredData)
-    );
-    console.log(nestedData, filteredData)
-    // Set xScale
-    const [ xScale, setXScale ] = useState(
-        () => (scaleTime().domain(extent(filteredData, (d) => d.Year)).nice().range([
-            margin.left,
-            width - margin.right
-        ]))
-    );
+	// Set xScale
+	const [
+		xScale,
+		setXScale
+	] = useState(() =>
+		scaleTime().domain(extent(filteredData, (d) => d.Year)).nice().range([
+			margin.left,
+			width - margin.right
+		])
+	);
 
-    // Set yScale
-    const [ yScale, setYScale ] = useState(
-        () => (scaleLinear().domain(extent(filteredData, (d) => d['GDP per capita'])).nice().range([
-            height - margin.bottom,
-            margin.top
-        ]))
-    );
+	// Set yScale
+	const [
+		yScale,
+		setYScale
+	] = useState(() =>
+		scaleLinear().domain(extent(filteredData, (d) => d['GDP per capita'])).nice().range([
+			height - margin.bottom,
+			margin.top
+		])
+	);
 
 	// Declare Axis Refs
 	const xAxisRef = useRef(null);
@@ -68,7 +69,6 @@ const MultiLine = ({ countryOptions, data }) => {
 	const xAxis = axisBottom().tickSizeOuter(0);
 	const yAxis = axisLeft().tickSizeOuter(0);
 
-    console.log('x', xScale)
 	// Declare line function
 	const lineFn = line().curve(curveCatmullRom).x((d) => xScale(d.Year)).y((d) => yScale(d['GDP per capita']));
 	// Declare voronoi function
@@ -120,136 +120,127 @@ const MultiLine = ({ countryOptions, data }) => {
 		setSelected(selections);
 	}
 
-    useEffect(() => {
-        console.log(selected);
+	useEffect(
+		() => {
+			// Declare xScale
+			const xScale = scaleTime().domain(extent(filteredData, (d) => d.Year)).nice().range([
+				margin.left,
+				width - margin.right
+			]);
+			// Apply xScale to xAxis
+			xAxis.scale(xScale);
+			// add axis and attributes to xAxis
+			d3Select(xAxisRef.current)
+				.call(xAxis)
+				.selectAll('text')
+				.attr('y', 3)
+				.attr('x', margin.right / 2)
+				.attr('font-weight', 'bold')
+				.attr('transform', 'rotate(45)')
+				.style('text-anchor', 'start');
+			// Calculate xTranslate for xAxis Title
+			const xTranslate = `translate(${width - margin.left * 1 - margin.right * 1},${height -
+				margin.bottom * 0.9})`;
+			// Apply xAxis title attributes
+			d3Select('.xAxisTitle')
+				.attr('text-anchor', 'end')
+				.style('font-size', '.8em')
+				.style('font-weight', 600)
+				.attr('transform', xTranslate)
+				.text('Years');
 
-        // Declare xScale
-        const xScale = scaleTime().domain(extent(filteredData, (d) => d.Year)).nice().range([
-            margin.left,
-            width - margin.right
-        ]);
-        // Apply xScale to xAxis
-        xAxis.scale(xScale);
-        // add axis and attributes to xAxis
-        d3Select(xAxisRef.current)
-            .call(xAxis)
-            .selectAll('text')
-            .attr('y', 3)
-            .attr('x', margin.right/2)
-            .attr('font-weight', 'bold')
-            .attr('transform', 'rotate(45)')
-            .style('text-anchor', 'start');
-        // Calculate xTranslate for xAxis Title
-        const xTranslate = `translate(${width - margin.left * 1 - margin.right * 1},${height -
-        margin.bottom * .9})`;
-        // Apply xAxis title attributes
-        d3Select(".xAxisTitle")
-            .attr("text-anchor", "end")
-            .style("font-size",".8em")
-            .style("font-weight", 600)
-            .attr("transform", xTranslate)
-            .text("Years");
+			// Declare yScale
+			const yScale = scaleLinear().domain(extent(filteredData, (d) => d['GDP per capita'])).nice().range([
+				height - margin.bottom,
+				margin.top
+			]);
+			// Apply yScale to yAxis
+			yAxis.scale(yScale);
+			// add axis and attributes to yAxis
+			d3Select(yAxisRef.current).call(yAxis).selectAll('text').attr('dy', '.35em').attr('font-weight', 'bold');
+			// calculate yTranslate for yAxis title
+			const yTranslate = `translate(${margin.left * 2.3 + margin.right * 2.3}, ${margin.top * 0.5})`;
+			// Apply yAxis title attributes
+			d3Select('.yAxisTitle')
+				.attr('text-anchor', 'end')
+				.style('font-size', '.8em')
+				.style('font-weight', 600)
+				.attr('transform', yTranslate)
+				.text('Adjusted GDP Per Capita');
 
-        // Declare yScale
-        const yScale = scaleLinear().domain(extent(filteredData, (d) => d['GDP per capita'])).nice().range([
-            height - margin.bottom,
-            margin.top
-        ]);
-        // Apply yScale to yAxis
-        yAxis.scale(yScale);
-        // add axis and attributes to yAxis
-        d3Select(yAxisRef.current)
-            .call(yAxis)
-            .selectAll("text")
-            .attr("dy", ".35em")
-            .attr("font-weight", "bold");
-        // calculate yTranslate for yAxis title
-        const yTranslate = `translate(${margin.left * 2.3 + margin.right * 2.3}, ${margin.top * .5})`;
-        // Apply yAxis title attributes
-        d3Select(".yAxisTitle")
-            .attr("text-anchor", "end")
-            .style("font-size",".8em")
-            .style("font-weight", 600)
-            .attr("transform", yTranslate)
-            .text("Adjusted GDP Per Capita");
+			// Add data and G for each country
+			const country = d3Select('#multiLine')
+				.selectAll('.country')
+				.data(data, (d) => d.key)
+				.join('g')
+				.attr('class', 'country')
+				.attr('fill', 'none')
+				.attr('stroke', '#ddd')
+				.attr('stroke-width', 1.5)
+				.attr('stroke-linejoin', 'round')
+				.attr('stroke-linecap', 'round');
 
-        // Add data and G for each country
-        const country = d3Select("#multiLine")
-            .selectAll(".country")
-            .data(nestedData, d => d.key)
-            .join("g")
-            .attr("class", "country")
-            .attr("fill", "none")
-            .attr("stroke", "#ddd")
-            .attr("stroke-width", 1.5)
-            .attr("stroke-linejoin", "round")
-            .attr("stroke-linecap", "round");
+			// Add country line paths to each country
+			country.append('path').attr('class', 'line').style('mix-blend-mode', 'multiply').attr('d', function(d){
+				d.values.forEach((country) => {
+					country.line = this;
+					return country;
+				});
+				return lineFn(d.values);
+			});
 
-        // Add country line paths to each country
-        country
-            .append("path")
-            .attr("class", "line")
-            .style("mix-blend-mode", "multiply")
-            .attr("d", function(d) {
-                d.values.forEach(country => {
-                country.line = this;
-                return country;
-                });
-                return lineFn(d.values);
-            });
-        
-        // Add text label for each line path
-        country
-            .append("text")
-            .datum(d => {
-                return {
-                name: d.key,
-                value: d.values[d.values.length - 1]
-                };
-            })
-            .attr("transform", d => {
-                const yValue = yScale(d.value["GDP per capita"]);
-                const xValue = xScale(d.value.Year);
-                return `translate(${xValue}, ${yValue})`;
-            })
-            .attr("x", 3)
-            .attr("dy", ".35em")
-            .attr("fill", "black")
-            .attr("stroke-width", 0)
-            .style("font-size", "10px")
-            .style("font-style", "sans-serif")
-            .style("font-weight", "normal")
-            .text(d => d.name);
+			// Add text label for each line path
+			country
+				.append('text')
+				.datum((d) => {
+					return {
+						name  : d.key,
+						value : d.values[d.values.length - 1]
+					};
+				})
+				.attr('transform', (d) => {
+					const yValue = yScale(d.value['GDP per capita']);
+					const xValue = xScale(d.value.Year);
+					return `translate(${xValue}, ${yValue})`;
+				})
+				.attr('x', 3)
+				.attr('dy', '.35em')
+				.attr('fill', 'black')
+				.attr('stroke-width', 0)
+				.style('font-size', '10px')
+				.style('font-style', 'sans-serif')
+				.style('font-weight', 'normal')
+				.text((d) => d.name);
 
-        const hoverGroup = d3Select("#multiLine")
-            .append("g")
-            .attr("class", "hoverGroup")
-            .style("opacity", 1)
-            .style("stroke-width", 1)
-            .style("stroke", "gray");
+			const hoverGroup = d3Select('#multiLine')
+				.append('g')
+				.attr('class', 'hoverGroup')
+				.style('opacity', 1)
+				.style('stroke-width', 1)
+				.style('stroke', 'gray');
 
-        hoverGroup
-            .append("text")
-            .attr("class", "hoverText")
-            .attr("x", width / 2)
-            .attr("y", margin.top);
+			hoverGroup.append('text').attr('class', 'hoverText').attr('x', width / 2).attr('y', margin.top);
 
-        // Add Voronoi paths for handling mouse events
-        // Uncomment stroke to show voronoi
-        // d3Select(".voronoi")
-        //     .selectAll("path")
-        //     .data(voronoiFn.polygons(merge(nestedData.map(d => d.values))))
-        //     .enter()
-        //     .append("path")
-        //     .classed("voronoi-path", true)
-        //     .style("pointer-events", "all")
-        //     .attr("d", d => (d ? "M" + d.join("L") + "Z" : null))
-        //     //   .attr("stroke", "red")
-        //     // .attr("stroke-width", "0.2")
-        //     .attr("fill", "none")
-        //     .on("mouseover", d => this.mouseover(d, xScale, yScale))
-        //     .on("mouseout", d => this.mouseout(d));
-    }, [selected])
+			// Add Voronoi paths for handling mouse events
+			// Uncomment stroke to show voronoi
+			// d3Select(".voronoi")
+			//     .selectAll("path")
+			//     .data(voronoiFn.polygons(merge(data.map(d => d.values))))
+			//     .enter()
+			//     .append("path")
+			//     .classed("voronoi-path", true)
+			//     .style("pointer-events", "all")
+			//     .attr("d", d => (d ? "M" + d.join("L") + "Z" : null))
+			//     //   .attr("stroke", "red")
+			//     // .attr("stroke-width", "0.2")
+			//     .attr("fill", "none")
+			//     .on("mouseover", d => this.mouseover(d, xScale, yScale))
+			//     .on("mouseout", d => this.mouseout(d));
+		},
+		[
+			selected
+		]
+	);
 
 	return (
 		<div>
