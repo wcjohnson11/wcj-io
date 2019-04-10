@@ -5,7 +5,6 @@ import {
 	curveCatmullRom,
 	extent,
 	line,
-	nest,
 	scaleLinear,
 	scaleTime,
 	select as d3Select,
@@ -34,10 +33,20 @@ const MultiLine = ({ countryOptions, data }) => {
 	]);
 
 	// Get list of active countries
-	const activeCountries = selected.map((d) => d.value);
+	function getActiveCountries(){
+		return selected.map((d) => d.value);
+	}
 
-	// Get filtered Data for active countries
-	const filteredData = data.filter((d) => activeCountries.indexOf(d.key) >= 0);
+	// Get array of filtered data
+	function getFilteredData(){
+		return data.filter((d) => getActiveCountries().indexOf(d.key) >= 0);
+	}
+
+	// Set filtered Data for active countries
+	const [
+		filteredData,
+		setFilteredData
+	] = useState(getFilteredData());
 
 	// Set xScale
 	const [
