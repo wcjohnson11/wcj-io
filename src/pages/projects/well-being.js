@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { graphql } from 'gatsby';
-import { nest } from 'd3';
+import { set, timeParse } from 'd3';
 
 import Layout from '../../components/layout';
 import MarkdownDiv from '../../components/markdownDiv';
@@ -16,6 +16,11 @@ const metrics = [
 	{ label: 'World Happiness Report Score', value: 'World_Happiness_Report_Score' }
 ];
 
+const cleanNumbers = (string) => {
+	return parseFloat(string.replace(/,/g, ''));
+};
+const parseTime = timeParse('%Y');
+
 const WellBeing = ({ data, location }) => {
 	// Set up component state
 	const [
@@ -30,17 +35,18 @@ const WellBeing = ({ data, location }) => {
 		sectionHTML[field] = fields[field];
 	}
 
-	// Extract gdp data from allGdpovertimeCsv
+	// Extract gdp data from allGdpovertimeCsv for multiline chart
 	const { edges } = data.allGdpovertimeCsv;
 	const multilineNodes = edges.map(({ node }) => {
-		return node;
+		return {
+			Entity: node.Entity,
+			Code: node.Code,
+			Year: parseTime(node.Year),
+			'GDP per capita': cleanNumbers(node['GDP_per_capita'])
+		};
 	});
-	// Nest data in array of objects, keyed by country name
-	const multilineData = nest().key((d) => d.Entity).entries(multilineNodes);
-	// Create unique set of country names then create options array for multiline dropdown select
-	const countryOptions = multilineData.map((country) => {
-		return { label: country.key, value: country.key };
-	});
+	// Get list of countries from allGdpovertimeCSV for multiline dropdown
+	const countryOptions = set(multilineNodes.map(d => d.Entity)).values();
 
 	// handle <Select> onChange for metric
 	function handleMetricChange(metric){
@@ -52,7 +58,7 @@ const WellBeing = ({ data, location }) => {
 			<h1>{frontmatter.title}</h1>
 			<small>{frontmatter.date}</small>
 			<MarkdownDiv content={sectionHTML['Introduction']} />
-			<MultiLine countryOptions={countryOptions} data={multilineData} />
+			<MultiLine countryOptions={countryOptions} data={multilineNodes} />
 			<MarkdownDiv content={sectionHTML['Beyond_GDP']} />
 			<DropdownSelect
 				currentSelection={metric}
