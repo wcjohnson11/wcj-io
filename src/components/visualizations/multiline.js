@@ -49,26 +49,24 @@ const MultiLine = ({ countryOptions, data }) => {
 	] = useState(getFilteredData());
 
 	// Set xScale
-	const [
-		xScale,
-		setXScale
-	] = useState(() =>
-		scaleTime().domain(extent(filteredData, (d) => d.Year)).nice().range([
-			margin.left,
-			width - margin.right
-		])
-	);
-
+	const xScale = scaleTime()
+        .domain(extent(filteredData, (d) => d.Year))
+        .nice()
+        .range([
+            margin.left,
+            width - margin.right
+	]);
+    console.log('z', extent(filteredData.map(d => d.Year)))
 	// Set yScale
-	const [
-		yScale,
-		setYScale
-	] = useState(() =>
-		scaleLinear().domain(extent(filteredData, (d) => d['GDP per capita'])).nice().range([
-			height - margin.bottom,
-			margin.top
-		])
-	);
+	const yScale = scaleLinear()
+        .domain(extent(filteredData, (d) => {
+            console.log(d)
+            return d['GDP per capita']}))
+        .nice()
+        .range([
+            height - margin.bottom,
+            margin.top
+	]);
 
 	// Declare Axis Refs
 	const xAxisRef = useRef(null);
@@ -79,18 +77,31 @@ const MultiLine = ({ countryOptions, data }) => {
 	const yAxis = axisLeft().tickSizeOuter(0);
 
 	// Declare line function
-	const lineFn = line().curve(curveCatmullRom).x((d) => xScale(d.Year)).y((d) => yScale(d['GDP per capita']));
+	const [lineFn, setLineFn] = useState(
+       () => line()
+            .curve(curveCatmullRom)
+            .x((d) => {
+                // console.log('lb', xScale(d.Year))
+                return xScale(d.Year)})
+            .y((d) => yScale(d['GDP per capita']))
+    );
+
 	// Declare voronoi function
-	const voronoiFn = voronoi().x((d) => xScale(d.Year)).y((d) => yScale(d['GDP per capita'])).extent([
-		[
-			-margin.left,
-			-margin.top
-		],
-		[
-			width + margin.right,
-			height + margin.bottom
-		]
-	]);
+	const [ voronoiFn, setVoronoiFn ] = useState(
+        () => voronoi()
+            .x((d) => xScale(d.Year))
+            .y((d) => yScale(d['GDP per capita']))
+            .extent([
+                [
+                    -margin.left,
+                    -margin.top
+                ],
+                [
+                    width + margin.right,
+                    height + margin.bottom
+                ]
+        ])
+    );
 
 	// Handle mouseOver event
 	function mouseOver(d, xScale, yScale){
@@ -131,11 +142,9 @@ const MultiLine = ({ countryOptions, data }) => {
 
 	useEffect(
 		() => {
-			// Declare xScale
-			const xScale = scaleTime().domain(extent(filteredData, (d) => d.Year)).nice().range([
-				margin.left,
-				width - margin.right
-			]);
+            const filteredData = getFilteredData();
+			// Update xScale domain
+			xScale.domain(extent(filteredData, (d) => d.Year))
 			// Apply xScale to xAxis
 			xAxis.scale(xScale);
 			// add axis and attributes to xAxis
@@ -148,8 +157,8 @@ const MultiLine = ({ countryOptions, data }) => {
 				.attr('transform', 'rotate(45)')
 				.style('text-anchor', 'start');
 			// Calculate xTranslate for xAxis Title
-			const xTranslate = `translate(${width - margin.left * 1 - margin.right * 1},${height -
-				margin.bottom * 0.9})`;
+			const xTranslate = `translate(${width - margin.left},${height -
+				margin.bottom})`;
 			// Apply xAxis title attributes
 			d3Select('.xAxisTitle')
 				.attr('text-anchor', 'end')
@@ -158,11 +167,8 @@ const MultiLine = ({ countryOptions, data }) => {
 				.attr('transform', xTranslate)
 				.text('Years');
 
-			// Declare yScale
-			const yScale = scaleLinear().domain(extent(filteredData, (d) => d['GDP per capita'])).nice().range([
-				height - margin.bottom,
-				margin.top
-			]);
+			// Update yScale domain
+			yScale.domain(extent(filteredData, (d) => d['GDP per capita']));
 			// Apply yScale to yAxis
 			yAxis.scale(yScale);
 			// add axis and attributes to yAxis
@@ -178,9 +184,9 @@ const MultiLine = ({ countryOptions, data }) => {
 				.text('Adjusted GDP Per Capita');
 
 			// Add data and G for each country
-			const country = d3Select('#multiLine')
+			const country = d3Select('#multiline')
 				.selectAll('.country')
-				.data(data, (d) => d.key)
+				.data(filteredData, (d) => d.key)
 				.join('g')
 				.attr('class', 'country')
 				.attr('fill', 'none')
@@ -188,16 +194,22 @@ const MultiLine = ({ countryOptions, data }) => {
 				.attr('stroke-width', 1.5)
 				.attr('stroke-linejoin', 'round')
 				.attr('stroke-linecap', 'round');
-
+  
 			// Add country line paths to each country
-			country.append('path').attr('class', 'line').style('mix-blend-mode', 'multiply').attr('d', function(d){
-				d.values.forEach((country) => {
-					country.line = this;
-					return country;
-				});
+			country
+                .append('path')
+                .attr('class', 'line')
+                .style('mix-blend-mode', 'multiply')
+                .attr('d', function(d){
+                    d.values.forEach((country) => {
+                        // console.log(this)
+                        country.line = this;
+                        return country;
+				    });
+                // console.log(lineFn(d.values))
 				return lineFn(d.values);
 			});
-
+            console.log('hm', country)
 			// Add text label for each line path
 			country
 				.append('text')
@@ -221,7 +233,7 @@ const MultiLine = ({ countryOptions, data }) => {
 				.style('font-weight', 'normal')
 				.text((d) => d.name);
 
-			const hoverGroup = d3Select('#multiLine')
+			const hoverGroup = d3Select('#multiline')
 				.append('g')
 				.attr('class', 'hoverGroup')
 				.style('opacity', 1)
@@ -232,19 +244,19 @@ const MultiLine = ({ countryOptions, data }) => {
 
 			// Add Voronoi paths for handling mouse events
 			// Uncomment stroke to show voronoi
-			// d3Select(".voronoi")
-			//     .selectAll("path")
-			//     .data(voronoiFn.polygons(merge(data.map(d => d.values))))
-			//     .enter()
-			//     .append("path")
-			//     .classed("voronoi-path", true)
-			//     .style("pointer-events", "all")
-			//     .attr("d", d => (d ? "M" + d.join("L") + "Z" : null))
-			//     //   .attr("stroke", "red")
-			//     // .attr("stroke-width", "0.2")
-			//     .attr("fill", "none")
-			//     .on("mouseover", d => this.mouseover(d, xScale, yScale))
-			//     .on("mouseout", d => this.mouseout(d));
+			d3Select(".voronoi")
+			    .selectAll("path")
+			    .data(voronoiFn.polygons(merge(filteredData.map(d => d.values))))
+			    .enter()
+			    .append("path")
+			    .classed("voronoi-path", true)
+			    .style("pointer-events", "all")
+			    .attr("d", d => (d ? "M" + d.join("L") + "Z" : null))
+			    // .attr("stroke", "red")
+			    // .attr("stroke-width", "0.2")
+			    .attr("fill", "none")
+			    .on("mouseover", d => this.mouseover(d, xScale, yScale))
+			    .on("mouseout", d => this.mouseout(d));
 		},
 		[
 			selected
@@ -260,7 +272,7 @@ const MultiLine = ({ countryOptions, data }) => {
 				handleChange={handleSelectionChange}
 				isMulti={true}
 			/>
-			<svg className="multilineSvg" id="multiline" height={height} width={width}>
+			<svg className="multiline" id="multiline" height={height} width={width}>
 				<g className="xAxis" ref={xAxisRef} transform={`translate(0, ${height - margin.bottom})`} />
 				<g>
 					<text className="xAxisTitle" />
