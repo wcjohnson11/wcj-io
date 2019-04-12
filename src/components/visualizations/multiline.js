@@ -182,7 +182,7 @@ const MultiLine = ({ countryOptions, data }) => {
             // Bind data to countries
             const countriesWithData = d3Select('#multiline')
                 .selectAll('.country')
-                .data(nestedData, d => d.key);
+                .data(nestedData, d => d.key)
 
             // handle exit and remove
             countriesWithData
@@ -223,6 +223,7 @@ const MultiLine = ({ countryOptions, data }) => {
             countriesWithData
                 .merge(countriesWithUpdate)
                 .select("path")
+                .transition()
                 .attr("class", "line")
                 .style("mix-blend-mode", "multiply")
                 .attr("d", function(d) {
@@ -243,6 +244,7 @@ const MultiLine = ({ countryOptions, data }) => {
                     value: d.values[d.values.length - 1]
                     };
                 })
+                .transition()
                 .attr("transform", d => {
                     const yValue = yScale(d.value["GDP per capita"]);
                     const xValue = xScale(d.value.Year);
