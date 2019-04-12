@@ -35,27 +35,24 @@ const MultiLine = ({ countryOptions, data }) => {
 	]);
 
 	// Get list of active countries
-	function getActiveCountries(){
-		return selected.map((d) => d.value);
-	}
+    const activeCountries = selected.map((d) => d.value);
 
 	// Get array of filtered data
-	function getFilteredData(){
-		return data.filter((d) => getActiveCountries().indexOf(d.Entity) >= 0);
-	}
+	const filteredData = data.filter((d) => activeCountries.indexOf(d.Entity) >= 0);
 
 	// Get data in array of objects, keyed by country name
-	function getNestedData(){
-		return nest().key((d) => d.Entity).entries(getFilteredData());
-	}
-
-	const filteredData = getFilteredData();
+	const nestedData = nest()
+        .key((d) => d.Entity)
+        .entries(filteredData);
 
 	// Set xScale
-	const xScale = scaleTime().domain(extent(filteredData, (d) => d.Year)).nice().range([
-		margin.left,
-		width - margin.right
-	]);
+	const xScale = scaleTime()
+        .domain(extent(filteredData, (d) => d.Year))
+        .nice()
+        .range([
+            margin.left,
+            width - margin.right
+	    ]);
 
 	// Set yScale
 	const yScale = scaleLinear()
@@ -79,24 +76,16 @@ const MultiLine = ({ countryOptions, data }) => {
 	const yAxis = axisLeft().tickSizeOuter(0);
 
 	// Declare line function
-	const [
-		lineFn,
-		setLineFn
-	] = useState(() =>
-		line()
-			.curve(curveCatmullRom)
-			.x((d) => {
-				return xScale(d.Year);
-			})
-			.y((d) => yScale(d['GDP per capita']))
-	);
+	const lineFn = line()
+        .curve(curveCatmullRom)
+        .x((d) => xScale(d.Year))
+        .y((d) => yScale(d['GDP per capita']));
 
 	// Declare voronoi function
-	const [
-		voronoiFn,
-		setVoronoiFn
-	] = useState(() =>
-		voronoi().x((d) => xScale(d.Year)).y((d) => yScale(d['GDP per capita'])).extent([
+	const voronoiFn = voronoi()
+        .x((d) => xScale(d.Year))
+        .y((d) => yScale(d['GDP per capita']))
+        .extent([
 			[
 				-margin.left,
 				-margin.top
@@ -105,8 +94,7 @@ const MultiLine = ({ countryOptions, data }) => {
 				width + margin.right,
 				height + margin.bottom
 			]
-		])
-	);
+		]);
 
 	// Handle mouseOver event
 	function mouseOver(d, xScale, yScale){
@@ -147,14 +135,12 @@ const MultiLine = ({ countryOptions, data }) => {
 
 	useEffect(
 		() => {
-			const filteredData = getFilteredData();
-			const nestedData = getNestedData();
-			// Update xScale domain
-			xScale.domain(extent(filteredData, (d) => d.Year));
 			// Apply xScale to xAxis
 			xAxis.scale(xScale);
 			// add axis and attributes to xAxis
 			d3Select(xAxisRef.current)
+                .transition()
+                .duration(200)
 				.call(xAxis)
 				.selectAll('text')
 				.attr('y', 3)
@@ -173,12 +159,16 @@ const MultiLine = ({ countryOptions, data }) => {
 				.attr('transform', xTranslate)
 				.text('Years');
 
-			// Update yScale domain
-			yScale.domain(extent(filteredData, (d) => d['GDP per capita']));
 			// Apply yScale to yAxis
 			yAxis.scale(yScale);
 			// add axis and attributes to yAxis
-			d3Select(yAxisRef.current).call(yAxis).selectAll('text').attr('dy', '.35em').attr('font-weight', 'bold');
+			d3Select(yAxisRef.current)
+                .transition()
+                .duration(200)
+                .call(yAxis)
+                .selectAll('text')
+                .attr('dy', '.35em')
+                .attr('font-weight', 'bold');
 			// calculate yTranslate for yAxis title
 			const yTranslate = `translate(${margin.left * 2.3 + margin.right * 2.3}, ${margin.top * 0.5})`;
 			// Apply yAxis title attributes
@@ -189,11 +179,24 @@ const MultiLine = ({ countryOptions, data }) => {
 				.attr('transform', yTranslate)
 				.text('Adjusted GDP Per Capita');
 
-			// Add data and G for each country
-			const country = d3Select('#multiline')
-				.selectAll('.country')
-				.data(nestedData, (d) => d.key)
-				.join('g')
+            // Bind data to countries
+            const countriesWithData = d3Select('#multiline')
+                .selectAll('.country')
+                .data(nestedData, d => d.key);
+
+            // handle exit and remove
+            countriesWithData
+                .exit()
+                .attr("class", "exit")
+                .attr("opacity", 1)
+                .transition(200)
+                .attr("opacity", 0)
+                .remove();
+
+            // Handle update
+            const countriesWithUpdate = countriesWithData
+                .enter()
+                .append('g')
 				.attr('class', 'country')
 				.attr('fill', 'none')
 				.attr('stroke', '#ddd')
@@ -201,38 +204,60 @@ const MultiLine = ({ countryOptions, data }) => {
 				.attr('stroke-linejoin', 'round')
 				.attr('stroke-linecap', 'round');
 
-			// Add country line paths to each country
-			country.append('path').attr('class', 'line').style('mix-blend-mode', 'multiply').attr('d', function(d){
-				d.values.forEach((country) => {
-					country.line = this;
-					return country;
-				});
-				return lineFn(d.values);
-			});
+            // append path and text
+            countriesWithUpdate.append('path')
+            countriesWithUpdate.append('text')
 
-			// Add text label for each line path
-			country
-				.append('text')
-				.datum((d) => {
-					return {
-						name  : d.key,
-						value : d.values[d.values.length - 1]
-					};
-				})
-				.attr('transform', (d) => {
-					const yValue = yScale(d.value['GDP per capita']);
-					const xValue = xScale(d.value.Year);
-					return `translate(${xValue}, ${yValue})`;
-				})
-				.attr('x', 3)
-				.attr('dy', '.35em')
-				.attr('fill', 'black')
-				.attr('stroke-width', 0)
-				.style('font-size', '10px')
-				.style('font-style', 'sans-serif')
-				.style('font-weight', 'normal')
-				.text((d) => d.name);
+            // merge country g values (existing and updating)
+            countriesWithData
+                .merge(countriesWithUpdate)
+                .select("g")
+                .attr("class", "country")
+                .attr("fill", "none")
+                .attr("stroke", "steelblue")
+                .attr("stroke-width", 1.5)
+                .attr("stroke-linejoin", "round")
+                .attr("stroke-linecap", "round");
 
+            // Merge paths and draw
+            countriesWithData
+                .merge(countriesWithUpdate)
+                .select("path")
+                .attr("class", "line")
+                .style("mix-blend-mode", "multiply")
+                .attr("d", function(d) {
+                    d.values.forEach(country => {
+                    country.line = this;
+                    return country;
+                    });
+                    return lineFn(d.values);
+                });
+
+            // merge text and add text
+            countriesWithData
+                .merge(countriesWithUpdate)
+                .select("text")
+                .datum(d => {
+                    return {
+                    name: d.key,
+                    value: d.values[d.values.length - 1]
+                    };
+                })
+                .attr("transform", d => {
+                    const yValue = yScale(d.value["GDP per capita"]);
+                    const xValue = xScale(d.value.Year);
+                    return `translate(${xValue}, ${yValue})`;
+                })
+                .attr("x", 3)
+                .attr("dy", ".35em")
+                .attr("fill", "black")
+                .attr("stroke-width", 0)
+                .style("font-size", "10px")
+                .style("font-style", "sans-serif")
+                .style("font-weight", "normal")
+                .text(d => d.name);
+
+            // Add text for hover info
 			const hoverGroup = d3Select('#multiline')
 				.append('g')
 				.attr('class', 'hoverGroup')
@@ -242,6 +267,9 @@ const MultiLine = ({ countryOptions, data }) => {
 
 			hoverGroup.append('text').attr('class', 'hoverText').attr('x', width / 2).attr('y', margin.top);
 
+            // Clean up existing voronoi
+            selectAll('.voronoi-path').remove()
+            
 			// Add Voronoi paths for handling mouse events
 			// Uncomment stroke to show voronoi
 			d3Select(".voronoi")
