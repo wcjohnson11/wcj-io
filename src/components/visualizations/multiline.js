@@ -33,7 +33,6 @@ const MultiLine = ({ countryOptions, data }) => {
 		{ label: 'Germany', value: 'Germany' },
 		{ label: 'France', value: 'France' }
 	]);
-
 	// Get list of active countries
     const activeCountries = selected.map((d) => d.value);
 
@@ -95,6 +94,11 @@ const MultiLine = ({ countryOptions, data }) => {
 				height + margin.bottom
 			]
 		]);
+
+    // array of options for dropdown
+    const dropdownCountryOptions = countryOptions.map(country => {
+        return { label: country, value: country}
+    });
 
 	// Handle mouseOver event
 	function mouseOver(d, xScale, yScale){
@@ -298,7 +302,7 @@ const MultiLine = ({ countryOptions, data }) => {
 			<h1>Multiline</h1>
 			<DropdownSelect
 				currentSelection={selected}
-				options={countryOptions}
+				options={dropdownCountryOptions}
 				handleChange={handleSelectionChange}
 				isMulti={true}
 			/>
