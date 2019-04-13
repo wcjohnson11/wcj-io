@@ -220,12 +220,14 @@ const MultiLine = ({ countryOptions, data }) => {
 							.attr('class', 'exit')
 							.attr('opacity', 1)
 							.call((exit) =>
-								exit.transition(
-									d3Select('#multiline')
-										.transition()
-										.duration(500)
-								).attr('opacity', 0)
-								.remove()
+								exit
+									.transition(
+										d3Select('#multiline')
+											.transition()
+											.duration(500)
+									)
+									.attr('opacity', 0)
+									.remove()
 							)
 				);
 
@@ -284,26 +286,50 @@ const MultiLine = ({ countryOptions, data }) => {
 				.attr('x', width / 2)
 				.attr('y', margin.top);
 
-			// Clean up existing voronoi
-			selectAll('.voronoi-path').remove();
-
-			// Add Voronoi paths for handling mouse events
+			// Create and update voronoi to handle mouseover
 			// Uncomment stroke to show voronoi
 			d3Select('.voronoi')
 				.selectAll('path')
 				.data(
 					voronoiFn.polygons(merge(nestedData.map((d) => d.values)))
 				)
-				.enter()
-				.append('path')
-				.classed('voronoi-path', true)
-				.style('pointer-events', 'all')
-				.attr('d', (d) => (d ? 'M' + d.join('L') + 'Z' : null))
-				.attr('stroke', 'red')
-				.attr('stroke-width', '0.2')
-				.attr('fill', 'none')
-				.on('mouseover', (d) => mouseOver(d, xScale, yScale))
-				.on('mouseout', (d) => mouseOut(d));
+				.join(
+					(enter) =>
+						enter
+							.append('path')
+							.classed('voronoi-path', true)
+							.style('pointer-events', 'all')
+							.attr(
+								'd',
+								(d) => (d ? 'M' + d.join('L') + 'Z' : null)
+							)
+							// .attr('stroke', 'red')
+							// .attr('stroke-width', '0.2')
+							.attr('fill', 'none')
+							.on('mouseover', (d) =>
+								mouseOver(d, xScale, yScale)
+							)
+							.on('mouseout', (d) => mouseOut(d)),
+					(update) =>
+						update
+							.on('mouseover', (d) =>
+								mouseOver(d, xScale, yScale)
+							)
+							.call((update) =>
+								update
+									.transition(
+										d3Select('#multiline')
+											.transition()
+											.duration(500)
+									)
+									.attr(
+										'd',
+										(d) =>
+											d ? 'M' + d.join('L') + 'Z' : null
+									)
+							),
+					(exit) => exit.remove()
+				);
 		},
 		[
 			selected
