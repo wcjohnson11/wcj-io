@@ -16,9 +16,9 @@ import { merge } from 'd3-array';
 
 import DropdownSelect from '../dropdownSelect';
 
-const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+const margin = { top: 20, right: 60, bottom: 20, left: 20 };
 const height = 500;
-const width = 700;
+const width = 880;
 const MultiLine = ({ countryOptions, data }) => {
 	// Initial Selected State
 	const [
@@ -247,7 +247,7 @@ const MultiLine = ({ countryOptions, data }) => {
 				});
 
 			//  update text post merge
-			countriesWithData
+			const countryLabels = countriesWithData
 				.select('text')
 				.datum((d) => {
 					return {
@@ -255,21 +255,25 @@ const MultiLine = ({ countryOptions, data }) => {
 						value : d.values[d.values.length - 1]
 					};
 				})
-				.transition()
-				.duration(750)
+				// Transition is causing wrapping to not work properly
+				// Wrapping spacing is odd
+				// .transition()
+				// .duration(750)
 				.attr('transform', (d) => {
 					const yValue = yScale(d.value['GDP per capita']);
 					const xValue = xScale(d.value.Year);
 					return `translate(${xValue}, ${yValue})`;
 				})
 				.attr('x', 3)
+				.attr('class', 'labels')
 				.attr('dy', '.35em')
 				.attr('fill', 'black')
 				.attr('stroke-width', 0)
 				.style('font-size', '10px')
 				.style('font-style', 'sans-serif')
 				.style('font-weight', 'normal')
-				.text((d) => d.name);
+				.text((d) => d.name)
+				.call(wrap, 45)
 
 			// Add hover group
 			const hoverGroup = d3Select('#multiline')
@@ -303,8 +307,8 @@ const MultiLine = ({ countryOptions, data }) => {
 								'd',
 								(d) => (d ? 'M' + d.join('L') + 'Z' : null)
 							)
-							// .attr('stroke', 'red')
-							// .attr('stroke-width', '0.2')
+							.attr('stroke', 'red')
+							.attr('stroke-width', '0.2')
 							.attr('fill', 'none')
 							.on('mouseover', (d) =>
 								mouseOver(d, xScale, yScale)
@@ -378,3 +382,38 @@ const MultiLine = ({ countryOptions, data }) => {
 };
 
 export default MultiLine;
+
+
+
+function wrap(text, width) {
+    text.each(function () {
+        var text = d3Select(this),
+            words = text.text().split(/\s+/).reverse(),
+            word,
+            line = [],
+            lineNumber = 0,
+            lineHeight = 1.1, // ems
+            x = text.attr("x"),
+            y = text.attr("y"),
+            dy = parseFloat(.35),
+            tspan = text.text(null)
+                        .append("tspan")
+                        .attr("x", x)
+                        .attr("y", y)
+						.attr("dy", dy + "em");
+        while (word = words.pop()) {
+            line.push(word);
+            tspan.text(line.join(" "));
+            if (tspan.node().getComputedTextLength() > width) {
+                line.pop();
+                tspan.text(line.join(" "));
+                line = [word];
+                tspan = text.append("tspan")
+                            .attr("x", x)
+                            .attr("y", y)
+                            .attr("dy", ++lineNumber * lineHeight + dy + "em")
+                            .text(word);
+            }
+        }
+    });
+}
