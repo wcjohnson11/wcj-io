@@ -18,11 +18,12 @@ import DropdownSelect from '../dropdownSelect';
 
 function wrapSVGText(text, width){
 	text.each(function(){
-		var text = d3Select(this),
+		let text = d3Select(this),
 			words = text.text().split(/\s+/).reverse(),
 			word,
 			line = [],
-			lineHeight = 0.35, // ems
+			lineNumber = 0,
+			lineHeight = 1, // ems
 			x = text.attr('x'),
 			y = text.attr('y'),
 			dy = 0.4,
@@ -33,7 +34,6 @@ function wrapSVGText(text, width){
 				.attr('y', y)
 				.attr('dy', dy + 'em');
 		while ((word = words.pop())) {
-			let lineNumber = 1;
 			line.push(word);
 			tspan.text(line.join(' '));
 			if (tspan.node().getComputedTextLength() > width) {
@@ -275,7 +275,7 @@ const MultiLine = ({ countryOptions, data }) => {
 				});
 
 			//  update text post merge
-			const countryLabels = countriesWithData
+			countriesWithData
 				.select('text')
 				.datum((d) => {
 					return {
@@ -283,17 +283,8 @@ const MultiLine = ({ countryOptions, data }) => {
 						value : d.values[d.values.length - 1]
 					};
 				})
-				// Transition causes svg wrapping to not work
-				// .transition()
-				// .duration(750)
-				.attr('transform', (d) => {
-					const yValue = yScale(d.value['GDP per capita']);
-					const xValue = xScale(d.value.Year);
-					return `translate(${xValue}, ${yValue})`;
-				})
 				.attr('class', 'countryLabels')
 				.attr('x', 3)
-				.attr('y', -1)
 				.attr('class', 'labels')
 				.attr('dy', '.35em')
 				.attr('fill', 'black')
@@ -302,7 +293,14 @@ const MultiLine = ({ countryOptions, data }) => {
 				.style('font-style', 'sans-serif')
 				.style('font-weight', 'normal')
 				.text((d) => d.name)
-				.call(wrapSVGText, margin.right);
+				.call(wrapSVGText, margin.right)
+				.transition()
+				.duration(750)
+				.attr('transform', (d) => {
+					const yValue = yScale(d.value['GDP per capita']);
+					const xValue = xScale(d.value.Year);
+					return `translate(${xValue}, ${yValue})`;
+				})
 
 			// Add hover group
 			const hoverGroup = d3Select('#multiline')
