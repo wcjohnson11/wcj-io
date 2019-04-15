@@ -16,7 +16,44 @@ import { merge } from 'd3-array';
 
 import DropdownSelect from '../dropdownSelect';
 
-const margin = { top: 20, right: 60, bottom: 20, left: 20 };
+function wrapSVGText(text, width){
+	text.each(function(){
+		var text = d3Select(this),
+			words = text.text().split(/\s+/).reverse(),
+			word,
+			line = [],
+			lineHeight = 0.35, // ems
+			x = text.attr('x'),
+			y = text.attr('y'),
+			dy = 0.4,
+			tspan = text
+				.text(null)
+				.append('tspan')
+				.attr('x', x)
+				.attr('y', y)
+				.attr('dy', dy + 'em');
+		while ((word = words.pop())) {
+			let lineNumber = 1;
+			line.push(word);
+			tspan.text(line.join(' '));
+			if (tspan.node().getComputedTextLength() > width) {
+				line.pop();
+				tspan.text(line.join(' '));
+				line = [
+					word
+				];
+				tspan = text
+					.append('tspan')
+					.attr('x', x)
+					.attr('y', lineNumber + y)
+					.attr('dy', ++lineNumber * lineHeight + dy + 'em')
+					.text(word);
+			}
+		}
+	});
+}
+
+const margin = { top: 20, right: 50, bottom: 50, left: 50 };
 const height = 500;
 const width = 880;
 const MultiLine = ({ countryOptions, data }) => {
@@ -31,7 +68,7 @@ const MultiLine = ({ countryOptions, data }) => {
 		{ label: 'India', value: 'India' },
 		{ label: 'China', value: 'China' },
 		{ label: 'Germany', value: 'Germany' },
-		{ label: 'France', value: 'France' }
+		{ label: 'Costa Rica', value: 'Costa Rica' }
 	]);
 
 	// Get list of active countries
@@ -154,23 +191,12 @@ const MultiLine = ({ countryOptions, data }) => {
 				.duration(750)
 				.call(xAxis)
 				.selectAll('text')
-				.attr('y', 3)
-				.attr('x', margin.right / 2)
+				.attr('y', 10)
+				.attr('dy', ' 0.35em')
+				.attr('x', 10)
 				.attr('font-weight', 'bold')
 				.attr('transform', 'rotate(45)')
 				.style('text-anchor', 'start');
-
-			// Calculate xTranslate for xAxis Title
-			const xTranslate = `translate(${width - margin.left},${height -
-				margin.bottom})`;
-
-			// Apply xAxis title attributes
-			d3Select('.xAxisTitle')
-				.attr('text-anchor', 'end')
-				.style('font-size', '.8em')
-				.style('font-weight', 600)
-				.attr('transform', xTranslate)
-				.text('Years');
 
 			// Apply yScale to yAxis
 			yAxis.scale(yScale);
@@ -179,21 +205,23 @@ const MultiLine = ({ countryOptions, data }) => {
 			d3Select(yAxisRef.current)
 				.transition()
 				.duration(750)
-				.call(yAxis)
+				// Remove tick for 0 value
+				.call(
+					yAxis.ticks().tickFormat((d) => {
+						if (d) return d;
+					})
+				)
 				.selectAll('text')
 				.attr('dy', '.35em')
 				.attr('font-weight', 'bold');
 
-			// calculate yTranslate for yAxis title
-			const yTranslate = `translate(${margin.left * 2.3 +
-				margin.right * 2.3}, ${margin.top * 0.5})`;
-
 			// Apply yAxis title attributes
 			d3Select('.yAxisTitle')
-				.attr('text-anchor', 'end')
-				.style('font-size', '.8em')
-				.style('font-weight', 600)
-				.attr('transform', yTranslate)
+				.attr('text-anchor', 'start')
+				.style('font-size', '1em')
+				.style('fill', 'black')
+				.style('font-weight', 700)
+				.attr('transform', `translate(0, ${margin.top / 2})`)
 				.text('Adjusted GDP Per Capita');
 
 			// Bind data to countries and handle enter, update, exit
@@ -255,8 +283,7 @@ const MultiLine = ({ countryOptions, data }) => {
 						value : d.values[d.values.length - 1]
 					};
 				})
-				// Transition is causing wrapping to not work properly
-				// Wrapping spacing is odd
+				// Transition causes svg wrapping to not work
 				// .transition()
 				// .duration(750)
 				.attr('transform', (d) => {
@@ -264,7 +291,9 @@ const MultiLine = ({ countryOptions, data }) => {
 					const xValue = xScale(d.value.Year);
 					return `translate(${xValue}, ${yValue})`;
 				})
+				.attr('class', 'countryLabels')
 				.attr('x', 3)
+				.attr('y', -1)
 				.attr('class', 'labels')
 				.attr('dy', '.35em')
 				.attr('fill', 'black')
@@ -273,7 +302,7 @@ const MultiLine = ({ countryOptions, data }) => {
 				.style('font-style', 'sans-serif')
 				.style('font-weight', 'normal')
 				.text((d) => d.name)
-				.call(wrap, 45)
+				.call(wrapSVGText, margin.right);
 
 			// Add hover group
 			const hoverGroup = d3Select('#multiline')
@@ -307,8 +336,9 @@ const MultiLine = ({ countryOptions, data }) => {
 								'd',
 								(d) => (d ? 'M' + d.join('L') + 'Z' : null)
 							)
-							.attr('stroke', 'red')
-							.attr('stroke-width', '0.2')
+							// Uncomment to see voronoi
+							// .attr('stroke', 'red')
+							// .attr('stroke-width', '0.2')
 							.attr('fill', 'none')
 							.on('mouseover', (d) =>
 								mouseOver(d, xScale, yScale)
@@ -359,18 +389,17 @@ const MultiLine = ({ countryOptions, data }) => {
 					className="xAxis"
 					ref={xAxisRef}
 					transform={`translate(0, ${height - margin.bottom})`}
-				/>
-				<g>
+				>
 					<text className="xAxisTitle" />
 				</g>
 				<g
 					className="yAxis"
 					ref={yAxisRef}
 					transform={`translate(${margin.left}, 0)`}
-				/>
-				<g>
+				>
 					<text className="yAxisTitle" />
 				</g>
+
 				<g className="focus" transform={`translate(-100, -100)`}>
 					<circle r={3.5} />
 					<text y={-10} />
@@ -382,38 +411,3 @@ const MultiLine = ({ countryOptions, data }) => {
 };
 
 export default MultiLine;
-
-
-
-function wrap(text, width) {
-    text.each(function () {
-        var text = d3Select(this),
-            words = text.text().split(/\s+/).reverse(),
-            word,
-            line = [],
-            lineNumber = 0,
-            lineHeight = 1.1, // ems
-            x = text.attr("x"),
-            y = text.attr("y"),
-            dy = parseFloat(.35),
-            tspan = text.text(null)
-                        .append("tspan")
-                        .attr("x", x)
-                        .attr("y", y)
-						.attr("dy", dy + "em");
-        while (word = words.pop()) {
-            line.push(word);
-            tspan.text(line.join(" "));
-            if (tspan.node().getComputedTextLength() > width) {
-                line.pop();
-                tspan.text(line.join(" "));
-                line = [word];
-                tspan = text.append("tspan")
-                            .attr("x", x)
-                            .attr("y", y)
-                            .attr("dy", ++lineNumber * lineHeight + dy + "em")
-                            .text(word);
-            }
-        }
-    });
-}
