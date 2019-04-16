@@ -13,6 +13,7 @@ import {
 	voronoi
 } from 'd3';
 import { merge } from 'd3-array';
+import { withTheme } from 'styled-components';
 
 import DropdownSelect from '../dropdownSelect';
 
@@ -56,7 +57,7 @@ function wrapSVGText(text, width){
 const margin = { top: 20, right: 50, bottom: 50, left: 50 };
 const height = 500;
 const width = 880;
-const MultiLine = ({ countryOptions, data }) => {
+const MultiLine = ({ countryOptions, data, theme }) => {
 	// Initial Selected State
 	const [
 		selected,
@@ -142,7 +143,7 @@ const MultiLine = ({ countryOptions, data }) => {
 	function mouseOver(d, xScale, yScale){
 		// Set color of moused over line
 		selectAll('.line').attr('stroke', (el) => {
-			return d.data.Entity === el.key ? 'steelblue' : '#ddd';
+			return d.data.Entity === el.key ? theme.colorPrimary : '#ddd';
 		});
 		// Move line to top
 		d.data.line.parentNode.appendChild(d.data.line);
@@ -154,9 +155,10 @@ const MultiLine = ({ countryOptions, data }) => {
 			)})`
 		);
 		// Set opacity of hoverGroup to 1
-		d3Select('.hoverGroup').transition().style('opacity', 1);
+		d3Select('.hoverGroup').style('opacity', 1);
 		// Set text styles, attributes and value
 		d3Select('.hoverText')
+			.style('stroke', theme.colorPrimary)
 			.style('font-size', '.9em')
 			.style('text-anchor', 'middle')
 			.attr('y', margin.top * 1.5)
@@ -168,7 +170,7 @@ const MultiLine = ({ countryOptions, data }) => {
 		// Turn all lines gray
 		selectAll('.line').attr('stroke', '#ddd');
 		// Set opacity to 0
-		d3Select('.hoverGroup').transition().style('opacity', 0);
+		d3Select('.hoverGroup').style('opacity', 0);
 		// Set hover text value to 0
 		d3Select('.hoverText').text('');
 		// Move focus element out of viewbox
@@ -370,7 +372,6 @@ const MultiLine = ({ countryOptions, data }) => {
 
 	return (
 		<div>
-			<h1>Multiline</h1>
 			<DropdownSelect
 				currentSelection={selected}
 				options={dropdownCountryOptions}
@@ -399,8 +400,7 @@ const MultiLine = ({ countryOptions, data }) => {
 				</g>
 
 				<g className="focus" transform={`translate(-100, -100)`}>
-					<circle r={3.5} />
-					<text y={-10} />
+					<circle r={3.5} fill={theme.colorPrimary} />
 				</g>
 				<g className="voronoi" fill="none" />
 			</svg>
@@ -408,4 +408,4 @@ const MultiLine = ({ countryOptions, data }) => {
 	);
 };
 
-export default MultiLine;
+export default withTheme(MultiLine);
