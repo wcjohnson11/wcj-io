@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { graphql } from 'gatsby';
 import { set, timeParse } from 'd3';
+import  useWindowSize from '../../utils/useWindowSize';
 
 import Layout from '../../components/layout';
 import MarkdownDiv from '../../components/markdownDiv';
@@ -27,6 +28,9 @@ const WellBeing = ({ data, location }) => {
 		metric,
 		setMetric
 	] = useState(metrics[0]);
+
+	// Get window size for responsive charts
+	const windowSize = useWindowSize();
 
 	// Extract sectionHTML from markdownRemark
 	const { fields, frontmatter } = data.markdownRemark;
@@ -58,7 +62,7 @@ const WellBeing = ({ data, location }) => {
 			<h1>{frontmatter.title}</h1>
 			<small>{frontmatter.date}</small>
 			<MarkdownDiv content={sectionHTML['Introduction']} />
-			<MultiLine countryOptions={countryOptions} data={multilineNodes} />
+			<MultiLine countryOptions={countryOptions} data={multilineNodes} windowWidth={windowSize.width} />
 			<MarkdownDiv content={sectionHTML['Beyond_GDP']} />
 			<DropdownSelect
 				currentSelection={metric}

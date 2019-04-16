@@ -13,7 +13,7 @@ import {
 	voronoi
 } from 'd3';
 import { merge } from 'd3-array';
-import { withTheme } from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 
 import DropdownSelect from '../dropdownSelect';
 
@@ -54,10 +54,18 @@ function wrapSVGText(text, width){
 	});
 }
 
-const margin = { top: 20, right: 50, bottom: 50, left: 50 };
+const FullWidthDiv = styled.div`
+	width: 100vw;
+	position: relative;
+	left: 50%;
+	right: 50%;
+	margin-left: -50vw;
+	margin-right: -50vw;
+`;
+
+const margin = { top: 20, right: 50, bottom: 50, left: 40 };
 const height = 500;
-const width = 880;
-const MultiLine = ({ countryOptions, data, theme }) => {
+const MultiLine = ({ countryOptions, data, theme, windowWidth }) => {
 	// Initial Selected State
 	const [
 		selected,
@@ -82,6 +90,8 @@ const MultiLine = ({ countryOptions, data, theme }) => {
 
 	// Get data in array of objects, keyed by country name
 	const nestedData = nest().key((d) => d.Entity).entries(filteredData);
+
+	const width = windowWidth > 880 ? 880 : windowWidth;
 
 	// Set xScale
 	const xScale = scaleTime()
@@ -148,29 +158,36 @@ const MultiLine = ({ countryOptions, data, theme }) => {
 		// Move line to top
 		d.data.line.parentNode.appendChild(d.data.line);
 		// Move focus into viewbox
-		d3Select('.focus').attr(
-			'transform',
-			`translate(${xScale(d.data.Year)}, ${yScale(
-				d.data['GDP per capita']
-			)})`
-		).selectAll(line)
-			.attr('stroke-dasharray', "3 3")
+		d3Select('.focus')
+			.attr(
+				'transform',
+				`translate(${xScale(d.data.Year)}, ${yScale(
+					d.data['GDP per capita']
+				)})`
+			)
+			.selectAll(line)
+			.attr('stroke-dasharray', '3 3')
 			.attr('stroke-width', '1.5px');
 
-		d3Select('.focus').select('line.xFocusLine')
-				.attr('stroke-dasharray', "3 3")
-				.attr('stroke-width', '1.5px')
-				.attr('x1', 0)
-				.attr('x2', margin.right - xScale(d.data.Year))
-				.attr('y1', 0)
-				.attr('y2', 0);
-		d3Select('.focus').select('line.yFocusLine')
-				.attr('stroke-dasharray', "3 3")
-				.attr('stroke-width', '1.5px')
-				.attr('x1', 0)
-				.attr('x2', 0)
-				.attr('y1', 0)
-				.attr('y2', height - yScale(d.data['GDP per capita']) - margin.bottom);
+		d3Select('.focus')
+			.select('line.xFocusLine')
+			.attr('stroke-dasharray', '3 3')
+			.attr('stroke-width', '1.5px')
+			.attr('x1', 0)
+			.attr('x2', margin.right - xScale(d.data.Year))
+			.attr('y1', 0)
+			.attr('y2', 0);
+		d3Select('.focus')
+			.select('line.yFocusLine')
+			.attr('stroke-dasharray', '3 3')
+			.attr('stroke-width', '1.5px')
+			.attr('x1', 0)
+			.attr('x2', 0)
+			.attr('y1', 0)
+			.attr(
+				'y2',
+				height - yScale(d.data['GDP per capita']) - margin.bottom
+			);
 
 		// Set opacity of hoverGroup to 1
 		d3Select('.hoverGroup').style('opacity', 1);
@@ -320,7 +337,7 @@ const MultiLine = ({ countryOptions, data, theme }) => {
 					const yValue = yScale(d.value['GDP per capita']);
 					const xValue = xScale(d.value.Year);
 					return `translate(${xValue}, ${yValue})`;
-				})
+				});
 
 			// Add hover group
 			const hoverGroup = d3Select('#multiline')
@@ -389,7 +406,7 @@ const MultiLine = ({ countryOptions, data, theme }) => {
 	);
 
 	return (
-		<div>
+		<FullWidthDiv>
 			<DropdownSelect
 				currentSelection={selected}
 				options={dropdownCountryOptions}
@@ -419,12 +436,20 @@ const MultiLine = ({ countryOptions, data, theme }) => {
 
 				<g className="focus" transform={`translate(-100, -100)`}>
 					<circle r={3.5} fill={theme.colorPrimary} />
-					<line className={'xFocusLine'} fill="none" stroke={theme.colorPrimary} />
-					<line className={'yFocusLine'} fill="none" stroke={theme.colorPrimary} />
+					<line
+						className={'xFocusLine'}
+						fill="none"
+						stroke={theme.colorPrimary}
+					/>
+					<line
+						className={'yFocusLine'}
+						fill="none"
+						stroke={theme.colorPrimary}
+					/>
 				</g>
 				<g className="voronoi" fill="none" />
 			</svg>
-		</div>
+		</FullWidthDiv>
 	);
 };
 
