@@ -153,7 +153,25 @@ const MultiLine = ({ countryOptions, data, theme }) => {
 			`translate(${xScale(d.data.Year)}, ${yScale(
 				d.data['GDP per capita']
 			)})`
-		);
+		).selectAll(line)
+			.attr('stroke-dasharray', "3 3")
+			.attr('stroke-width', '1.5px');
+
+		d3Select('.focus').select('line.xFocusLine')
+				.attr('stroke-dasharray', "3 3")
+				.attr('stroke-width', '1.5px')
+				.attr('x1', 0)
+				.attr('x2', margin.right - xScale(d.data.Year))
+				.attr('y1', 0)
+				.attr('y2', 0);
+		d3Select('.focus').select('line.yFocusLine')
+				.attr('stroke-dasharray', "3 3")
+				.attr('stroke-width', '1.5px')
+				.attr('x1', 0)
+				.attr('x2', 0)
+				.attr('y1', 0)
+				.attr('y2', height - yScale(d.data['GDP per capita']) - margin.bottom);
+
 		// Set opacity of hoverGroup to 1
 		d3Select('.hoverGroup').style('opacity', 1);
 		// Set text styles, attributes and value
@@ -401,6 +419,8 @@ const MultiLine = ({ countryOptions, data, theme }) => {
 
 				<g className="focus" transform={`translate(-100, -100)`}>
 					<circle r={3.5} fill={theme.colorPrimary} />
+					<line className={'xFocusLine'} fill="none" stroke={theme.colorPrimary} />
+					<line className={'yFocusLine'} fill="none" stroke={theme.colorPrimary} />
 				</g>
 				<g className="voronoi" fill="none" />
 			</svg>
