@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { graphql } from 'gatsby';
+import { set, timeParse } from 'd3';
+import  useWindowSize from '../../utils/useWindowSize';
 
 import Layout from '../../components/layout';
 import MarkdownDiv from '../../components/markdownDiv';
+import MultiLine from '../../components/visualizations/multiline';
 import DropdownSelect from '../../components/dropdownSelect';
 
 // Mapping of metrics to markdownRemark keys
@@ -14,19 +17,40 @@ const metrics = [
 	{ label: 'World Happiness Report Score', value: 'World_Happiness_Report_Score' }
 ];
 
-const WellBeing = (props) => {
+const cleanNumbers = (string) => {
+	return parseFloat(string.replace(/,/g, ''));
+};
+const parseTime = timeParse('%Y');
+
+const WellBeing = ({ data, location }) => {
 	// Set up component state
-	const { data, location} = props;
 	const [
 		metric,
 		setMetric
 	] = useState(metrics[0]);
+
+	// Get window size for responsive charts
+	const windowSize = useWindowSize();
+
 	// Extract sectionHTML from markdownRemark
 	const { fields, frontmatter } = data.markdownRemark;
 	const sectionHTML = {};
 	for (var field in fields) {
 		sectionHTML[field] = fields[field];
 	}
+
+	// Extract gdp data from allGdpovertimeCsv for multiline chart
+	const { edges } = data.allGdpovertimeCsv;
+	const multilineNodes = edges.map(({ node }) => {
+		return {
+			Entity: node.Entity,
+			Code: node.Code,
+			Year: parseTime(node.Year),
+			'GDP per capita': cleanNumbers(node['GDP_per_capita'])
+		};
+	});
+	// Get list of countries from allGdpovertimeCSV for multiline dropdown
+	const countryOptions = set(multilineNodes.map(d => d.Entity)).values();
 
 	// handle <Select> onChange for metric
 	function handleMetricChange(metric){
@@ -38,6 +62,7 @@ const WellBeing = (props) => {
 			<h1>{frontmatter.title}</h1>
 			<small>{frontmatter.date}</small>
 			<MarkdownDiv content={sectionHTML['Introduction']} />
+			<MultiLine countryOptions={countryOptions} data={multilineNodes} windowWidth={windowSize.width} />
 			<MarkdownDiv content={sectionHTML['Beyond_GDP']} />
 			<DropdownSelect
 				currentSelection={metric}
@@ -72,6 +97,16 @@ export const query = graphql`
 				sections {
 					markdown
 					name
+				}
+			}
+		}
+		allGdpovertimeCsv {
+			edges {
+				node {
+					Entity
+					Code
+					Year
+					GDP_per_capita
 				}
 			}
 		}
