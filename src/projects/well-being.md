@@ -2,6 +2,7 @@
 slug: well-being
 title: Measuring Well-Being For A Better World
 date: 2019-03-13T20:18:49.501Z
+excerpt: An interactive exploration on the history and current methods for measuring global well-being, my entry into the World Data Visualization Prize.
 tags:
   - dataviz
   - d3
