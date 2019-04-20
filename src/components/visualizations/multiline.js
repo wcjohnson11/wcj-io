@@ -44,7 +44,7 @@ const MultiLine = ({ countryOptions, data, theme, windowWidth }) => {
     .entries(filteredData);
 
   const width = windowWidth > 880 ? 880 : windowWidth - margin.left;
-  console.log(windowWidth, width);
+
   // Set xScale
   const xScale = scaleTime()
     .domain(extent(filteredData, d => d.Year))
