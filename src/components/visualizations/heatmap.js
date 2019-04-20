@@ -1,12 +1,17 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { graphql, useStaticQuery } from "gatsby";
 import { axisLeft, axisTop, select, scaleBand } from "d3";
-import { withTheme } from "styled-components";
-import acronymize from '../../utils/acronymize';
+import styled, { withTheme } from "styled-components";
+import acronymize from "../../utils/acronymize";
 
-const height = 350;
-const width = 350;
-const margin = { top: 120, left: 100 };
+const height = 375;
+const width = 375;
+const margin = { top: 135, left: 135 };
+
+const ContainerDiv = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 const Heatmap = ({ theme, metrics }) => {
   const { allHappy2Csv } = useStaticQuery(graphql`
@@ -37,6 +42,7 @@ const Heatmap = ({ theme, metrics }) => {
   `);
 
   // Define Axes Refs
+  const heatmapRef = useRef(null);
   const xAxisRef = useRef(null);
   const yAxisRef = useRef(null);
 
@@ -44,11 +50,11 @@ const Heatmap = ({ theme, metrics }) => {
   const xAxis = axisTop().tickSizeOuter(0);
   const yAxis = axisLeft().tickSizeOuter(0);
 
-// Extract xValues from StaticQuery data
+  // Extract xValues from StaticQuery data
   const xValues = allHappy2Csv.nodes.map(node => node.name);
 
   // Extract yValues from metrics map
-  const yValues = metrics.map(metric => metric.label);
+  const yValues = metrics.map(metric => metric.value);
 
   // Define Scales
   const xScale = scaleBand()
@@ -61,6 +67,7 @@ const Heatmap = ({ theme, metrics }) => {
     .range([0, height - margin.top])
     .padding(0.1);
 
+  useEffect(() => {
     // Apply x Scale and set text values
     xAxis.scale(xScale);
     select(xAxisRef.current)
@@ -80,12 +87,16 @@ const Heatmap = ({ theme, metrics }) => {
       .selectAll("text")
       .text(d =>
         // Create Acronyms for Metrics, GINI gets special treatment
-        acronymize(d, [
-          {
-            input: "GINI Index",
-            output: "GINI"
-          }
-        ])
+        acronymize(
+          d,
+          [
+            {
+              input: "GINI_Index",
+              output: "GINI"
+            }
+          ],
+          "_"
+        )
       )
       .attr("dy", ".35em")
       .style("font-size", "16px");
@@ -95,6 +106,7 @@ const Heatmap = ({ theme, metrics }) => {
       .append("g")
       .attr("class", "grid")
       .attr("transform", `translate(0, ${height - margin.top})`)
+      .attr("fill", theme.colorBorder)
       .call(
         axisTop(xScale)
           .ticks(xScale.domain().length)
@@ -103,10 +115,11 @@ const Heatmap = ({ theme, metrics }) => {
       );
 
     // add Y Gridlines
-    select("#heatmap")
+    select(heatmapRef.current)
       .append("g")
       .attr("class", "grid")
       .attr("transform", `translate(${width - margin.left}, 0)`)
+      .attr("fill", theme.colorBorder)
       .call(
         axisLeft(yScale)
           .ticks(yScale.domain().length)
@@ -116,24 +129,19 @@ const Heatmap = ({ theme, metrics }) => {
 
     // Create rects for data
     const rects = allHappy2Csv.nodes.reduce((result, node) => {
-        const xValue = node.name;
-        for (var key in node) {
-            if (key !== 'name') {
-                metrics.forEach(metric => {
-                    if (metric.value === key) {
-                        result.push({
-                            x: xScale(xValue),
-                            y: yScale(metric.label),
-                            width: xScale.bandwidth(),
-                            height: yScale.bandwidth(),
-                            fill: node[key] === "TRUE" ? theme.colorPrimary : 'transparent'
-                        });
-                        }
-                    }
-                );
-            }
+      const xValue = node.name;
+      for (var key in node) {
+        if (key !== "name") {
+          result.push({
+            x: xScale(xValue),
+            y: yScale(key),
+            width: xScale.bandwidth(),
+            height: yScale.bandwidth(),
+            fill: node[key] === "TRUE" ? theme.colorPrimary : "transparent"
+          });
         }
-        return result;
+      }
+      return result;
     }, []);
 
     // Mount rects and set attr
@@ -147,18 +155,22 @@ const Heatmap = ({ theme, metrics }) => {
       .attr("width", d => d.width)
       .attr("height", d => d.height)
       .attr("fill", d => d.fill);
+  }, []);
 
   return (
-    <svg
-      id="heatmap"
-      viewBox={`-${margin.left} -${margin.top} ${width + margin.left} ${height +
-        margin.top}`}
-      height={height}
-      width={width}
-    >
-      <g ref={xAxisRef} />
-      <g ref={yAxisRef} />
-    </svg>
+    <ContainerDiv>
+      <svg
+        id="heatmap"
+        ref={heatmapRef}
+        viewBox={`-${margin.left} -${margin.top} ${width +
+          margin.left} ${height + margin.top}`}
+        height={height}
+        width={width}
+      >
+        <g ref={xAxisRef} />
+        <g ref={yAxisRef} />
+      </svg>
+    </ContainerDiv>
   );
 };
 
