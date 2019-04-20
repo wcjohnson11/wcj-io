@@ -1,4 +1,4 @@
-const acronymize = (string, specialCase) => {
+const acronymize = (string, specialCase, seperator) => {
   if (specialCase) {
     for (var obj in specialCase) {
       if (string === specialCase[obj].input) {
@@ -7,9 +7,13 @@ const acronymize = (string, specialCase) => {
     }
   }
 
-  var words, acronym, nextWord;
+  let words, acronym, nextWord;
 
-  words = string.split(" ");
+  if (!seperator) {
+    seperator = ' ';
+  }
+  
+  words = string.split(seperator);
   acronym = "";
   var index = 0;
   while (index < words.length) {
