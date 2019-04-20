@@ -6,6 +6,7 @@ import  useWindowSize from '../../utils/useWindowSize';
 import Layout from '../../components/layout';
 import MarkdownDiv from '../../components/markdownDiv';
 import MultiLine from '../../components/visualizations/multiline';
+import Heatmap from '../../components/visualizations/heatmap';
 import DropdownSelect from '../../components/dropdownSelect';
 
 // Mapping of metrics to markdownRemark keys
@@ -64,6 +65,7 @@ const WellBeing = ({ data, location }) => {
 			<MarkdownDiv content={sectionHTML['Introduction']} />
 			<MultiLine countryOptions={countryOptions} data={multilineNodes} windowWidth={windowSize.width} />
 			<MarkdownDiv content={sectionHTML['Beyond_GDP']} />
+			<Heatmap metrics={metrics} />
 			<DropdownSelect
 				currentSelection={metric}
 				options={metrics}
