@@ -8,7 +8,7 @@
     "chroma-js": "^2.0.3",
     "d3": "^5.9.2",
     "d3-array": "^2.0.3",
-    "gatsby": "^2.3.4",
+    "gatsby": "^2.3.27",
     "gatsby-image": "^2.0.31",
     "gatsby-plugin-manifest": "^2.0.22",
     "gatsby-plugin-netlify": "^2.0.12",
@@ -27,7 +27,7 @@
     "gatsby-transformer-json": "^2.1.11",
     "gatsby-transformer-remark": "^2.3.1",
     "gatsby-transformer-sharp": "^2.1.15",
-    "netlify-cms": "^2.9.0",
+    "netlify-cms": "^2.9.1",
     "normalize.css": "^8.0.1",
     "prismjs": "^1.16.0",
     "prop-types": "^15.7.2",
@@ -43,7 +43,8 @@
     "smooth-scroll": "^16.0.3",
     "styled-components": "^4.1.3",
     "typography": "^0.16.18",
-    "typography-theme-us-web-design-standards": "^0.16.18"
+    "typography-theme-us-web-design-standards": "^0.16.18",
+    "world-atlas": "^1.1.4"
   },
   "devDependencies": {
     "prettier": "^1.16.4"
