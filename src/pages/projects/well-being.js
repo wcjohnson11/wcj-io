@@ -8,6 +8,7 @@ import MarkdownDiv from '../../components/markdownDiv';
 import MultiLine from '../../components/visualizations/multiline';
 import Heatmap from '../../components/visualizations/heatmap';
 import DropdownSelect from '../../components/dropdownSelect';
+import WorldMap from '../../components/visualizations/WorldMap';
 
 // Mapping of metrics to markdownRemark keys
 const metrics = [
@@ -73,6 +74,7 @@ const WellBeing = ({ data, location }) => {
 				isMulti={false}
 			/>
 			<MarkdownDiv content={sectionHTML[metric.value]} />
+			<WorldMap />
 			<MarkdownDiv content={sectionHTML['Conclusion']} />
 		</Layout>
 	);
