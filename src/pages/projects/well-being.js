@@ -54,6 +54,10 @@ const WellBeing = ({ data, location }) => {
 	// Get list of countries from allGdpovertimeCSV for multiline dropdown
 	const countryOptions = set(multilineNodes.map(d => d.Entity)).values();
 
+
+	// Get Happiness data from allHappy2CSV
+	const happinessData = data.allHappy2Csv.nodes;
+
 	// handle <Select> onChange for metric
 	function handleMetricChange(metric){
 		setMetric(metric);
@@ -74,7 +78,7 @@ const WellBeing = ({ data, location }) => {
 				isMulti={false}
 			/>
 			<MarkdownDiv content={sectionHTML[metric.value]} />
-			<WorldMap />
+			<WorldMap data={happinessData} windowWidth={windowSize.width}/>
 			<MarkdownDiv content={sectionHTML['Conclusion']} />
 		</Layout>
 	);
@@ -114,5 +118,15 @@ export const query = graphql`
 				}
 			}
 		}
+		allHappy2Csv(skip: 9) {
+    nodes {
+      name
+      GINI_Index
+      World_Happiness_Report_Score
+      Sustainable_Economic_Development_Index
+      Happy_Planet_Index
+      Human_Development_Index
+    }
+  }
 	}
 `;
