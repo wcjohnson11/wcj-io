@@ -1,10 +1,20 @@
 import React, { useEffect, useRef } from "react";
-import { axisBottom, extent, geoEqualEarth, geoPath, interpolateOranges, scaleLinear, scaleSequential, select, ticks } from 'd3';
-import * as topojson from 'topojson-client';
+import {
+  axisBottom,
+  extent,
+  geoEqualEarth,
+  geoPath,
+  interpolateOranges,
+  scaleLinear,
+  scaleSequential,
+  select,
+  ticks
+} from "d3";
+import * as topojson from "topojson-client";
 import { withTheme } from "styled-components";
-import world from 'world-atlas/world/110m';
+import world from "world-atlas/world/110m";
 
-import CenteringDiv from '../centeringDiv';
+import CenteringDiv from "../centeringDiv";
 
 const WorldMap = ({ data, metric, theme, windowWidth }) => {
   // Define Refs for D3
@@ -17,15 +27,20 @@ const WorldMap = ({ data, metric, theme, windowWidth }) => {
   const height = width * 0.75;
 
   // Create topology country objects
-  const topoCountries = topojson.feature(world, world.objects.countries).features;
+  const topoCountries = topojson.feature(world, world.objects.countries)
+    .features;
 
   // Create topology mesh objects
-  const topoMesh = topojson.mesh(world, world.objects.countries, (a, b) => a !== b);
+  const topoMesh = topojson.mesh(
+    world,
+    world.objects.countries,
+    (a, b) => a !== b
+  );
 
   // Declare metric extent on countries that have values
   const metricExtent = extent(data, d => {
     if (d[metric.value] !== "FALSE") {
-      return d[metric.value]
+      return d[metric.value];
     }
   });
 
@@ -34,7 +49,7 @@ const WorldMap = ({ data, metric, theme, windowWidth }) => {
   const xScale = scaleLinear()
     .domain(extent(colorScale.domain()))
     .rangeRound([width / 2 - 120, width / 2 + 120]);
-  
+
   // Declare Legend Ticks
   const legendTicks = ticks(metricExtent[0], metricExtent[1], 4);
 
@@ -46,28 +61,27 @@ const WorldMap = ({ data, metric, theme, windowWidth }) => {
   // Declare Projection
   const projection = geoEqualEarth()
     .rotate([-10, 0])
-    .fitExtent([[1,1], [width - 1, height - 51]], {type: "Sphere"})
+    .fitExtent([[1, 1], [width - 1, height - 51]], { type: "Sphere" })
     .precision(0.1);
 
   // Declare Geography Paths
-  const geographyPaths = geoPath()
-    .projection(projection);
+  const geographyPaths = geoPath().projection(projection);
 
   function getCountryColor(id, data, color, metric) {
     const matchedCountry = data.find(country => country.code === id);
-
+    
     if (matchedCountry && matchedCountry[metric]) {
       return color(matchedCountry[metric]);
     } else {
-      return theme.colorBorder;
+      return "grey";
     }
-  };
+  }
 
   function getCountryLabel(id, data) {
     const text = data.find(country => country.code === id);
     if (text) return text.name;
-    return "Unknown"
-  };
+    return "Unknown";
+  }
 
   useEffect(() => {
     // Append legend ticks
@@ -77,21 +91,21 @@ const WorldMap = ({ data, metric, theme, windowWidth }) => {
       .remove();
 
     // Add colors to gradient
-     select("#linear-gradient")
-       .selectAll("stop")
-       .data(
-         legendTicks.map((t, i, n) => ({
-           offset: `${(100 * i) / n.length}%`,
-           color: colorScale(t)
-         }))
-       )
-       .enter()
-       .append("stop")
-       .attr("offset", d => d.offset)
-       .attr("stop-color", d => d.color);
+    select("#linear-gradient")
+      .selectAll("stop")
+      .data(
+        legendTicks.map((t, i, n) => ({
+          offset: `${(100 * i) / n.length}%`,
+          color: colorScale(t)
+        }))
+      )
+      .enter()
+      .append("stop")
+      .attr("offset", d => d.offset)
+      .attr("stop-color", d => d.color);
 
     // Add metric label to caption
-    select('.caption').text(`${metric.label} scale`);
+    select(".caption").text(`${metric.label} scale`);
 
     // Create border
     select(svgRef.current)
@@ -105,15 +119,27 @@ const WorldMap = ({ data, metric, theme, windowWidth }) => {
 
     // Add country features
     const features = select(svgRef.current)
-         .append("g")
-         .selectAll("path")
-         .data(topoCountries)
-         .enter()
-         .append("path")
-         .attr("fill", 'red')
-         .attr("d", geographyPaths);
+      .append("g")
+      .selectAll("path")
+      .data(topoCountries)
+      .enter()
+      .append("path")
+      .attr("fill", d => getCountryColor(d.id, data, colorScale, metric.value))
+      .attr("d", geographyPaths);
 
-  }, [])
+    // Append country text labels
+    features.append("rect");
+    features.append("title").text(d => getCountryLabel(d.id, data));
+
+    // Append Country Mesh
+    select(svgRef.current)
+      .append("path")
+      .datum(topoMesh)
+      .attr("fill", "none")
+      .attr("stroke", theme.colorBorder)
+      .attr("stroke-linejoin", "round")
+      .attr("d", geographyPaths);
+  }, []);
 
   return (
     <CenteringDiv>

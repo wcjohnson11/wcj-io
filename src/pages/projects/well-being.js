@@ -126,6 +126,7 @@ export const query = graphql`
     }
     allHappy2Csv(skip: 9) {
       nodes {
+		code
         name
         GINI_Index
         World_Happiness_Report_Score
