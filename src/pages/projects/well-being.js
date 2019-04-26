@@ -9,6 +9,7 @@ import MultiLine from "../../components/visualizations/multiline";
 import Heatmap from "../../components/visualizations/heatmap";
 import DropdownSelect from "../../components/dropdownSelect";
 import WorldMap from "../../components/visualizations/WorldMap";
+import GLMap from "../../components/visualizations/glmap";
 
 // Mapping of metrics to markdownRemark keys
 const metrics = [
@@ -85,6 +86,7 @@ const WellBeing = ({ data, location }) => {
       />
       <MarkdownDiv content={sectionHTML[metric.value]} />
       <WorldMap data={happinessData} metric={metric} windowWidth={windowSize.width} />
+	  <GLMap data={happinessData} metric={metric} />
       <MarkdownDiv content={sectionHTML["Conclusion"]} />
     </Layout>
   );
