@@ -3,6 +3,21 @@ const { fmImagesToRelative } = require('gatsby-remark-relative-images');
 const remark = require('remark');
 const remarkHTML = require('remark-html');
 
+// Make sure webpack doesn't fail during build bc it's not in a web context
+// https://www.gatsbyjs.org/docs/debugging-html-builds/#fixing-third-party-modules
+exports.onCreateWebpackConfig = ({ stage, loaders, actions}) => {
+	if (stage === 'build.html') {
+		actions.setWebpackConfig({
+			module: {
+				rules: [{
+					test: '/react-mapbox-gl/',
+					use: loaders.null()
+				}]
+			}
+		})
+	}
+};
+
 exports.onCreateNode = ({ node, actions }) => {
 	const { createNodeField } = actions;
 	fmImagesToRelative(node);
