@@ -66,17 +66,15 @@ const WorldMap = ({ data, metric, theme, windowWidth }) => {
 
   // Declare Geography Paths
   const geographyPaths = geoPath().projection(projection);
-         
+
   function getCountryColor(id, data, color, metric) {
     const matchedCountry = data.find(country => country.code === id);
-    if (matchedCountry && matchedCountry.name === 'Sudan') console.log(color(matchedCountry[metric]))
+
     if (matchedCountry && matchedCountry[metric] !== "FALSE") {
       return color(matchedCountry[metric]);
     } else {
       return "black";
     }
-
-    console.log('blerr')
   }
 
   function getCountryLabel(id, data) {
