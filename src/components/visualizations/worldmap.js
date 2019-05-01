@@ -73,7 +73,7 @@ const WorldMap = ({ data, metric, theme, windowWidth }) => {
     if (matchedCountry && matchedCountry[metric] !== "FALSE") {
       return color(matchedCountry[metric]);
     } else {
-      return "black";
+      return "url(#diagonalHatch)";
     }
   }
 
@@ -147,6 +147,19 @@ const WorldMap = ({ data, metric, theme, windowWidth }) => {
       <svg height={height} width={width} ref={svgRef}>
         <defs>
           <linearGradient id="linear-gradient" ref={gradientRef} />
+          <pattern
+            id="diagonalHatch"
+            patternUnits="userSpaceOnUse"
+            width="4"
+            height="4"
+          >
+            <path
+              d="M-1,1 l2,-2
+           M0,4 l4,-4
+           M3,5 l2,-2"
+              style={{stroke: "black", strokeWidth:1 }}
+            />
+          </pattern>
         </defs>
         <g ref={legendRef} transform={`translate(0, ${height - width / 9})`}>
           <rect
