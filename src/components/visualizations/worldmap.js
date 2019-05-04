@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import {
   axisBottom,
+  event,
   extent,
   geoEqualEarth,
   geoPath,
@@ -11,10 +12,18 @@ import {
   ticks
 } from "d3";
 import * as topojson from "topojson-client";
-import { withTheme } from "styled-components";
+import styled, { withTheme } from "styled-components";
 import world from "world-atlas/world/110m";
 
 import CenteringDiv from "../centeringDiv";
+
+const Tooltip = styled.div`
+  position: absolute;
+  z-index: 10;
+  visibility: hidden;
+  border: 3px solid gray;
+  background: gray;
+`;
 
 const WorldMap = ({ data, metric, theme, windowWidth }) => {
   // Define Refs for D3
@@ -125,11 +134,20 @@ const WorldMap = ({ data, metric, theme, windowWidth }) => {
       .enter()
       .append("path")
       .attr("fill", d => getCountryColor(d.id, data, colorScale, metric.value))
-      .attr("d", geographyPaths);
-
-    // Append country text labels
-    features.append("rect");
-    features.append("title").text(d => getCountryLabel(d.id, data));
+      .attr("d", geographyPaths)
+      .on("mouseover", d => {
+        const name = getCountryLabel(d.id, data);
+        select('.tooltip')
+          .style('visibility', 'visible')
+          .style('top', `${event.pageY}px`)
+          .style('left', `${event.pageX}px`)
+          .select('h3')
+          .text(name);
+      })
+      .on("mouseout", d => {
+        select('.tooltip')
+          .style('visibility', 'hidden')
+      });
 
     // Append Country Mesh
     select(svgRef.current)
@@ -181,6 +199,10 @@ const WorldMap = ({ data, metric, theme, windowWidth }) => {
           />
         </g>
       </svg>
+      <Tooltip className="tooltip">
+        <h3 />
+        <div />
+      </Tooltip>
     </CenteringDiv>
   );
 };
