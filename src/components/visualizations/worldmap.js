@@ -92,6 +92,17 @@ const WorldMap = ({ data, metric, theme, windowWidth }) => {
     return "Unknown";
   }
 
+  function getMetricValue(id, data) {
+    const value = data.find(country => {
+      if (country.code === id) {
+        return country[metric];
+      }
+    });
+
+    if (value) return value;
+    return 'unknown';
+  }
+
   useEffect(() => {
     // Append legend ticks
     select(legendRef.current)
@@ -143,6 +154,8 @@ const WorldMap = ({ data, metric, theme, windowWidth }) => {
           .style('left', `${event.pageX}px`)
           .select('h3')
           .text(name);
+        select('.tooltip #value')
+          .text(getMetricValue(d.id, data))
       })
       .on("mouseout", d => {
         select('.tooltip')
@@ -201,7 +214,7 @@ const WorldMap = ({ data, metric, theme, windowWidth }) => {
       </svg>
       <Tooltip className="tooltip">
         <h3 />
-        <div />
+        <text id="value" />
       </Tooltip>
     </CenteringDiv>
   );
