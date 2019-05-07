@@ -22,7 +22,19 @@ const Tooltip = styled.div`
   z-index: 10;
   visibility: hidden;
   border: 3px solid gray;
-  background: gray;
+  background: ${props => props.theme.colorBackground};
+
+  p {
+    margin: 0 ${props => props.theme.padding};
+    padding: 0 ${props => props.theme.padding} 0 0;
+  }
+`;
+
+const Title = styled.p`
+  font-weight: ${props => props.theme.fontBold};
+`;
+
+const Metric = styled.p`
 `;
 
 const WorldMap = ({ data, metric, theme, windowWidth }) => {
@@ -93,13 +105,10 @@ const WorldMap = ({ data, metric, theme, windowWidth }) => {
   }
 
   function getMetricValue(id, data) {
-    const value = data.find(country => {
-      if (country.code === id) {
-        return country[metric];
-      }
-    });
+    const country = data.find(country => country.code === id);
 
-    if (value) return value;
+  
+    if (country) return country[metric.value];
     return 'unknown';
   }
 
@@ -150,12 +159,12 @@ const WorldMap = ({ data, metric, theme, windowWidth }) => {
         const name = getCountryLabel(d.id, data);
         select('.tooltip')
           .style('visibility', 'visible')
-          .style('top', `${event.pageY}px`)
-          .style('left', `${event.pageX}px`)
-          .select('h3')
+          .style("top", `${event.pageY + 18}px`)
+          .style("left", `${event.pageX + 18}px`)
+          .select('#title')
           .text(name);
         select('.tooltip #value')
-          .text(getMetricValue(d.id, data))
+          .text(`${metric.label}: ${getMetricValue(d.id, data)}`)
       })
       .on("mouseout", d => {
         select('.tooltip')
@@ -213,8 +222,8 @@ const WorldMap = ({ data, metric, theme, windowWidth }) => {
         </g>
       </svg>
       <Tooltip className="tooltip">
-        <h3 />
-        <text id="value" />
+        <Title id="title" />
+        <Metric id="value" />
       </Tooltip>
     </CenteringDiv>
   );
