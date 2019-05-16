@@ -9,6 +9,7 @@ import {
   scaleLinear,
   scaleSequential,
   select,
+  selectAll,
   ticks
 } from "d3";
 import * as topojson from "topojson-client";
@@ -21,7 +22,7 @@ const Tooltip = styled.div`
   position: absolute;
   z-index: 10;
   visibility: hidden;
-  border: 3px solid gray;
+  border: 3px solid ${props => props.theme.colorBorder};
   background: ${props => props.theme.colorBackground};
 
   p {
@@ -34,8 +35,7 @@ const Title = styled.p`
   font-weight: ${props => props.theme.fontBold};
 `;
 
-const Metric = styled.p`
-`;
+const Metric = styled.p``;
 
 const WorldMap = ({ data, metric, theme, windowWidth }) => {
   // Define Refs for D3
@@ -107,9 +107,8 @@ const WorldMap = ({ data, metric, theme, windowWidth }) => {
   function getMetricValue(id, data) {
     const country = data.find(country => country.code === id);
 
-  
     if (country) return country[metric.value];
-    return 'unknown';
+    return "unknown";
   }
 
   useEffect(() => {
@@ -140,41 +139,64 @@ const WorldMap = ({ data, metric, theme, windowWidth }) => {
     select(svgRef.current)
       .append("path")
       .datum({ type: "Sphere" })
-      .attr("fill", theme.colorPrimary)
+      .attr("fill", "theme.colorPrimary")
+      .style("opacity", 0.4)
       .attr("fill-rule", "nonzero")
       .attr("stroke", theme.colorBorder)
       .attr("stroke-linejoin", "round")
       .attr("d", geographyPaths);
 
     // Add country features
-    const features = select(svgRef.current)
+    select(svgRef.current)
       .append("g")
+      .attr("class", "countries")
       .selectAll("path")
       .data(topoCountries)
       .enter()
       .append("path")
+      .attr("stroke", 'gray')
+      .attr("stroke-width", "0.5px")
       .attr("fill", d => getCountryColor(d.id, data, colorScale, metric.value))
       .attr("d", geographyPaths)
-      .on("mouseover", d => {
+      .on("mouseover", function(d) {
         const name = getCountryLabel(d.id, data);
-        select('.tooltip')
-          .style('visibility', 'visible')
+        const metricValue = getMetricValue(d.id, data);
+
+        select(".tooltip")
+          .style("visibility", "visible")
           .style("top", `${event.pageY + 18}px`)
           .style("left", `${event.pageX + 18}px`)
-          .select('#title')
+          .select("#title")
           .text(name);
-        select('.tooltip #value')
-          .text(`${metric.label}: ${getMetricValue(d.id, data)}`)
+
+        select(".tooltip #value").text(
+          `${metric.label}: ${metricValue !== "FALSE" ? metricValue : "N/A"}`
+        );
+
+        selectAll(".countries path")
+          .style("opacity", 0.3)
+          .style("stroke", null);
+
+        select(this)
+          .style("opacity", 1)
+          .style("stroke", "#222")
+          .raise();
+
+        selectAll(".mesh").style("opacity", 0);
       })
       .on("mouseout", d => {
-        select('.tooltip')
-          .style('visibility', 'hidden')
+        select(".tooltip").style("visibility", "hidden");
+
+        selectAll(".countries path").style("opacity", 1);
+
+        selectAll(".mesh").style("opacity", 1);
       });
 
     // Append Country Mesh
     select(svgRef.current)
       .append("path")
       .datum(topoMesh)
+      .attr("class", "mesh")
       .attr("fill", "none")
       .attr("stroke", theme.colorBorder)
       .attr("stroke-width", "0.5px")
