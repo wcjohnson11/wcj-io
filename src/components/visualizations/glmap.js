@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import MapGL from "react-map-gl";
 import * as topojson from "topojson-client";
-
-import GLChlorpleth from "./glchloropleth";
+import world from "world-atlas/world/110m";
+import Immutable from "immutable";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import ChoroplethOverlay from "./glchloropleth";
@@ -22,9 +22,11 @@ const GLMap = ({ data }) => {
   const topoCountries = topojson.feature(world, world.objects.countries)
     .features;
 
+  const immutableTopoCountries = Immutable.fromJS(topoCountries)
+
   // Value accessor function
   function getValue (feature) {
-      console.log(feature)
+      // console.log(feature)
   }
 
   return (
@@ -41,10 +43,10 @@ const GLMap = ({ data }) => {
         onViewportChange={viewport => setViewport(viewport)}
       >
         <ChoroplethOverlay
-          features={topoCountries}
+          features={immutableTopoCountries}
           colorDomain={[0, 100]}
           colorRange={["hsl(0.8, 1, 0.8)", "hsl(0, 1, 1)"]}
-          valueAccessor={getValue(feature)}
+          valueAccessor={getValue}
           globalOpacity={0.8}
           renderWhileDragging={true}
         />
